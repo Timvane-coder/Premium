@@ -1,0 +1,29 @@
+{
+  "name": "buddy-md",
+  "version": "1.0.0",
+  "description": "A simple WhatsApp user bot written in JavaScript using the Baileys library. This bot can interact with groups and normal messages. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hacxk/Buddy-MD.git"
+  },
+  "keywords": [
+    "md",
+    "whatsapp-web",
+    "whatsapp-bot",
+    "multi-device",
+    "buddy-md",
+    "bot",
+    "baileys",
+    "nodejs"
+  ],
+  "author": "hacxk X cosm1cbug",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hacxk/Buddy-MD/issues"
+  },
+  "homepage": "https://github.com/hacxk/Buddy-MD#readme"
+}
