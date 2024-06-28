@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const { buddyMd } = require('./Utils/Bot');
+const { buddyMd } = require('./src/Utils/Bot');
 
 const app = express();
 const port = process.env.PORT || 3000;
