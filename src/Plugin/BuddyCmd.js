@@ -28,6 +28,12 @@ async function buddyCmdUpsert(sock, m) {
 
         if (command) {
             try {
+                // Check if command is restricted to groups only
+                if (command.isGroupOnly && !m.key.remoteJid.endsWith('@g.us')) {
+                    await buddy.reply(m, '⛔ *This command can only be used in groups.*');
+                    return;
+                }
+
                 if (command.emoji) {
                     await buddy.react(m, command.emoji);
                 }

@@ -176,11 +176,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgements
 
 - Thanks to all our contributors and users!
-- Special thanks to the WhatsApp Web API community
+- Special thanks to the @whiskeysockets/baileys community
 
 ---
 
-Made with ❤️ by the BuddyMsg Team
+Made with ❤️ by the Buddy Team
 ```
-
-This README.md provides a comprehensive overview of the BuddyMsg utility, including installation instructions, usage examples, and a detailed API reference. It covers all the functions available in the provided code snippet and presents them in a clear, organized manner.
