@@ -6,6 +6,9 @@ const path = require('path');
 // Set up logging
 const logger = pino({ level: 'silent' });
 
+// Plugins
+const { buddyMsg } = require('../Plugin/BuddyMsg')
+
 
 async function buddyMd() {
     const chalk = (await import('chalk')).default;
@@ -86,6 +89,7 @@ async function buddyMd() {
         // }
 
         if (connection === "open") {
+            await buddyMsg(sock)
             console.log(chalk.cyan('Connected! 🔒✅'));
             return new Promise((resolve, reject) => {
                 setTimeout(async () => {
