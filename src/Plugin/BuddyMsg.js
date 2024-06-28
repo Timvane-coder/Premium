@@ -24,21 +24,21 @@ async function buddyMsg(sock) {
           const jid = m.key.remoteJid;
           await sock.sendMessage(jid, { sticker: bufferOrUrl });
         },
-        sendImage: async (m, bufferOrUrl, caption = '', asSticker = false) => {
+        sendImage: async (m, bufferOrUrl, caption, asSticker = false) => {
           const jid = m.key.remoteJid;
           const options = (typeof bufferOrUrl === 'string'
             ? { url: bufferOrUrl, caption }
             : { image: bufferOrUrl, caption });
           await sock.sendMessage(jid, options);
         },
-        sendVideo: async (m, bufferOrUrl, caption = '', asSticker = false) => {
+        sendVideo: async (m, bufferOrUrl, caption, asSticker = false) => {
           const jid = m.key.remoteJid;
           const options = (typeof bufferOrUrl === 'string'
             ? { url: bufferOrUrl, caption }
             : { video: bufferOrUrl, caption });
           await sock.sendMessage(jid, options);
         },        
-        sendDocument: async (m, bufferOrUrl, mimetype, fileName = 'BUDDY') => {
+        sendDocument: async (m, bufferOrUrl, mimetype, fileName) => {
           const jid = m.key.remoteJid;
           const options = typeof bufferOrUrl === 'string'
             ? { url: bufferOrUrl, mimetype, fileName }

@@ -8,6 +8,7 @@ const logger = pino({ level: 'silent' });
 
 // Plugins
 const { buddyMsg } = require('../Plugin/BuddyMsg')
+const { buddyEvents } = require('../Plugin/BuddyEvent')
 
 
 async function buddyMd() {
@@ -24,8 +25,12 @@ async function buddyMd() {
         printQRInTerminal: true,
         mobile: false,
         keepAliveIntervalMs: 10000,
-        syncFullHistory: false,
         downloadHistory: false,
+        syncFullHistory: true,
+		shouldSyncHistoryMessage: msg => {
+			console.log(chalk.cyanBright(`Syncing chats..[${msg.progress}%]`));
+			return !!msg.syncType;
+		},
         markOnlineOnConnect: true,
         defaultQueryTimeoutMs: undefined,
         logger,
@@ -89,6 +94,7 @@ async function buddyMd() {
         // }
 
         if (connection === "open") {
+            await buddyEvents(sock, chalk)
             await buddyMsg(sock)
             console.log(chalk.cyan('Connected! 🔒✅'));
             return new Promise((resolve, reject) => {
