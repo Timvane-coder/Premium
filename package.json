@@ -4,7 +4,8 @@
   "description": "A simple WhatsApp user bot written in JavaScript using the Baileys library. This bot can interact with groups and normal messages. ",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,11 @@
   "bugs": {
     "url": "https://github.com/hacxk/Buddy-MD/issues"
   },
-  "homepage": "https://github.com/hacxk/Buddy-MD#readme"
+  "homepage": "https://github.com/hacxk/Buddy-MD#readme",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.5",
+    "chalk": "^5.3.0",
+    "express": "^4.19.2",
+    "qrcode-terminal": "^0.12.0"
+  }
 }
