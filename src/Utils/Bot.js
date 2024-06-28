@@ -7,11 +7,13 @@ const path = require('path');
 const logger = pino({ level: 'silent' });
 
 // Plugins
-const { buddyMsg } = require('../Plugin/BuddyMsg')
-const { buddyEvents } = require('../Plugin/BuddyEvent')
+const { buddyMsg } = require('../Plugin/BuddyMsg');
+const { buddyEvents } = require('../Plugin/BuddyEvent');
+const { loadCommands } = require('../Plugin/BuddyLoadCmd');
 
 
 async function buddyMd() {
+    await loadCommands(path.join(__dirname, '../Commands'))
     const chalk = (await import('chalk')).default;
     // Load state and authentication
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, '../Session'));
@@ -27,10 +29,10 @@ async function buddyMd() {
         keepAliveIntervalMs: 10000,
         downloadHistory: false,
         syncFullHistory: true,
-		shouldSyncHistoryMessage: msg => {
-			console.log(chalk.cyanBright(`Syncing chats..[${msg.progress}%]`));
-			return !!msg.syncType;
-		},
+        shouldSyncHistoryMessage: msg => {
+            console.log(chalk.cyanBright(`Syncing chats..[${msg.progress}%]`));
+            return !!msg.syncType;
+        },
         markOnlineOnConnect: true,
         defaultQueryTimeoutMs: undefined,
         logger,
@@ -53,7 +55,7 @@ async function buddyMd() {
             };
 
             // Merge default and custom settings (if available)
-            const typingDelay = { ...defaultTypingDelay, ...(settings.typingDelay || {}) };
+            const typingDelay = defaultTypingDelay;
             const messageLength = messageContent.length;
 
             // Handle audio messages

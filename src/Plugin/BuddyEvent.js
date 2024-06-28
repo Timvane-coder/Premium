@@ -1,19 +1,12 @@
+const { buddyCmdUpsert } = require('./BuddyCmd')
+
 async function buddyEvents(sock, chalk) {
     // Handle messages.upsert event
     sock.ev.on('messages.upsert', async ({ messages }) => {
+        const m = messages[0]
         try {
-            if (typeof messages[Symbol.iterator] === 'function') {
-                // Data is iterable, spread it as arguments
-                for (let message of messages) {
-                    // Handle each message
-                    console.log(chalk.blue(`📩 Upserted message:`, JSON.stringify(message)));
-                    // Implement your logic for upserted messages
-                }
-            } else {
-                // Data is not iterable, handle it as a single object
-                console.log(chalk.blue(`📩 Upserted message:`, JSON.stringify(messages)));
-                // Implement your logic for single upserted message
-            }
+            await buddyCmdUpsert(sock, m)
+            console.log(chalk.blue(`📩 Upserted message:`), m);
         } catch (error) {
             console.error(chalk.red(`❌ Error handling messages.upsert event:`, error));
         }
