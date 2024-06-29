@@ -34,7 +34,7 @@ async function buddyCmdUpsert(sock, m) {
             try {
                 const sender = m.key.remoteJid.endsWith('@g.us') ? m.key.participant : m.key.remoteJid;
                 // Check if command is restricted to groups only or admin only
-                if (command.isAdminOnly && !m.key.fromMe && !settings.OWNER_NUMBERS.includes(sender + '@s.whatsapp.net')) {
+                if (command.isAdminOnly && !m.key.fromMe && !settings.OWNER_NUMBERS.includes(sender.split('@s.whatsapp.net')[0])) {
                     await buddy.reply(m, '⛔ *This command can only be used by bot Owners.*');
                     return;
                 } else if (command.isGroupOnly && !m.key.remoteJid.endsWith('@g.us')) {

@@ -2,6 +2,9 @@ const { downloadContentFromMessage, downloadMediaMessage } = require('@whiskeyso
 const fs = require('fs');
 const { streamToBuffer } = require('./BuddyStreamToBuffer');
 
+const MAX_LISTENERS = 10;
+const listeners = [];
+
 async function buddyMsg(sock) {
   const RED = "\x1b[31m";
   const RESET = "\x1b[0m";
@@ -57,7 +60,7 @@ async function buddyMsg(sock) {
           try {
             const jid = m.key.remoteJid;
             const options = (typeof bufferOrUrl === 'string'
-              ? { url: bufferOrUrl, caption }
+              ? { image: bufferOrUrl, caption }
               : { image: bufferOrUrl, caption });
             return await sock.sendMessage(jid, options);
           } catch (err) {
@@ -68,7 +71,7 @@ async function buddyMsg(sock) {
           try {
             const jid = m.key.remoteJid;
             const options = (typeof bufferOrUrl === 'string'
-              ? { url: bufferOrUrl, caption }
+              ? { video: bufferOrUrl, caption }
               : { video: bufferOrUrl, caption });
             return await sock.sendMessage(jid, options);
           } catch (err) {
@@ -79,7 +82,7 @@ async function buddyMsg(sock) {
           try {
             const jid = m.key.remoteJid;
             const options = typeof bufferOrUrl === 'string'
-              ? { url: bufferOrUrl, mimetype, fileName }
+              ? { document: bufferOrUrl, mimetype, fileName }
               : { document: bufferOrUrl, mimetype, fileName };
             return await sock.sendMessage(jid, options);
           } catch (err) {
@@ -90,7 +93,7 @@ async function buddyMsg(sock) {
           try {
             const jid = m.key.remoteJid;
             const options = typeof bufferOrUrl === 'string'
-              ? { url: bufferOrUrl, ptt, mimetype: 'audio/mpeg' }
+              ? { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' }
               : { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' };
             return await sock.sendMessage(jid, options);
           } catch (err) {
@@ -160,18 +163,18 @@ async function buddyMsg(sock) {
           try {
             return new Promise((resolve, reject) => {
               let timer;
-
+        
               if (timeout && timeout > 0) {
                 timer = setTimeout(() => {
                   sock.ev.off('messages.upsert', replyHandler);
                   reject(new Error('Timeout exceeded while waiting for response'));
                 }, timeout);
               }
-
+        
               const replyHandler = async ({ messages }) => {
                 const msg = messages[0];
                 const senderJid = key.key.remoteJid;
-
+        
                 if (
                   ((msg.message?.extendedTextMessage?.contextInfo?.stanzaId ||
                     msg.message?.conversation?.contextInfo?.stanzaId) === sentMessage.key.id) &&
@@ -180,18 +183,25 @@ async function buddyMsg(sock) {
                 ) {
                   if (timer) clearTimeout(timer);
                   await sock.ev.off('messages.upsert', replyHandler);
-
+        
                   const responseText = msg.message?.extendedTextMessage?.text || msg.message?.conversation;
                   const ownImplement = {
                     key: msg.key,
                     message: msg.message,
                     response: responseText
                   };
-
+        
                   resolve(ownImplement);
                 }
               };
-
+        
+              // Add new listener and remove the oldest one if the limit is reached
+              listeners.push(replyHandler);
+              if (listeners.length > MAX_LISTENERS) {
+                const oldestListener = listeners.shift();
+                sock.ev.off('messages.upsert', oldestListener);
+              }
+        
               sock.ev.on('messages.upsert', replyHandler);
             });
           } catch (err) {

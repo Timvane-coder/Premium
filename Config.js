@@ -11,5 +11,6 @@ global.settings = {
         OPENWEATHERMAP_API_KEY: '', // Your OpenWeatherMap API key (if needed)
         // ... other API keys
     },
+    SAFE_SEARCH: false,
     // ... more settings
 };

@@ -75,6 +75,8 @@ async function buddyMd() {
                 await delay(audioDuration * 1000); // Wait for the audio duration
                 await sock.sendPresenceUpdate('paused', recipientJids[0]);
                 return msg;
+            } else if (messageType === 'videoMessage' || messageType === 'imageMessage' || messageType === 'documentMessage' || messageType === 'documentWithCaptionMessage' || messageType === 'protocolMessage') {
+                return msg;
             }
 
             // Handle text or caption messages
