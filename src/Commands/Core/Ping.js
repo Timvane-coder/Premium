@@ -32,6 +32,6 @@ Owner Name: ${OWNER_NAME} 😎
     `;
 
 
-    await buddy.editMsg(m, sentMessage, pingMessage);
+    const ds = await buddy.editMsg(m, sentMessage, pingMessage);
   }
 };

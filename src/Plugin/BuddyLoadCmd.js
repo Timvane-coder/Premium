@@ -81,7 +81,7 @@ function loadCommand(filePath) {
   try {
     const command = require(filePath);
     commands[command.usage] = command;
-    console.log(`\x1b[32mLoaded command: ${command.usage}\x1b[0m`);
+   console.log(`\x1b[32mLoaded command: ${command.usage}\x1b[0m`);
   } catch (error) {
     console.error(`\x1b[31mError loading command from ${filePath}:\x1b[0m`, error);
   }

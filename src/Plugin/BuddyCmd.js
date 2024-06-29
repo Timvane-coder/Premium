@@ -25,8 +25,11 @@ async function buddyCmdUpsert(sock, m) {
     const prefix = settings.PREFIX.find(p => response.startsWith(p));
     if (response.startsWith(prefix)) {
         const commandName = response.slice(prefix.length).trim().split(' ')[0]; // Extract command name
-        const command = commands[commandName];
-
+        const command = Object.values(commands).find(cmd => {
+            const usages = Array.isArray(cmd.usage) ? cmd.usage.map(u => u.toLowerCase()) : [cmd.usage.toLowerCase()];
+            return usages.includes(commandName.toLowerCase());
+        });        
+        
         if (command) {
             try {
                 const sender = m.key.remoteJid.endsWith('@g.us') ? m.key.participant : m.key.remoteJid;
@@ -45,7 +48,8 @@ async function buddyCmdUpsert(sock, m) {
                 if (command.emoji) {
                     await buddy.react(m, command.emoji);
                 }
-                return await command.execute(sock, m); // Execute the command
+                await sock.readMessages([m.key]);
+                return await command.execute(sock, m, (text || conversation || caption || '').split(/\s+/).slice(1)); // Execute the command
             } catch (err) {
                 console.error("\x1b[31mError executing command:\x1b[0m", err);
                 await buddy.reply(m, 'An error occurred while processing your command.'); // Optional error message to user

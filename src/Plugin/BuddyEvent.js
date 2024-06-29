@@ -5,8 +5,8 @@ async function buddyEvents(sock, chalk) {
     sock.ev.on('messages.upsert', async ({ messages }) => {
         const m = messages[0]
         try {
-            await buddyCmdUpsert(sock, m)
-            console.log(chalk.blue(`📩 Upserted message:`), m);
+            console.log(chalk.blue(`📩 Upserted message:`), JSON.stringify(m));
+            return await buddyCmdUpsert(sock, m)
         } catch (error) {
             console.error(chalk.red(`❌ Error handling messages.upsert event:`, error));
         }
@@ -206,5 +206,6 @@ async function buddyEvents(sock, chalk) {
 
     console.log(chalk.green(`🚀 Baileys event listeners initialized.`));
 }
+
 
 module.exports = { buddyEvents };

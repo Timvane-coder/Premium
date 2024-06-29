@@ -3,6 +3,10 @@ const { Boom } = require("@hapi/boom");
 const pino = require('pino');
 const path = require('path');
 
+// Small Fix For Waiting for Message
+const NodeCache = require('node-cache');
+const msgRetryCounterCache = new NodeCache();
+
 // Set up logging
 const logger = pino({ level: 'silent' });
 
@@ -11,9 +15,14 @@ const { buddyMsg } = require('../Plugin/BuddyMsg');
 const { buddyEvents } = require('../Plugin/BuddyEvent');
 const { loadCommands } = require('../Plugin/BuddyLoadCmd');
 
+(async () => {
+    await loadCommands(path.join(__dirname, '../Commands'));
+})();
+
+
+
 
 async function buddyMd() {
-    await loadCommands(path.join(__dirname, '../Commands'))
     const chalk = (await import('chalk')).default;
     // Load state and authentication
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, '../Session'));
@@ -28,6 +37,7 @@ async function buddyMd() {
         mobile: false,
         keepAliveIntervalMs: 10000,
         downloadHistory: false,
+        msgRetryCounterCache,
         syncFullHistory: true,
         shouldSyncHistoryMessage: msg => {
             console.log(chalk.cyanBright(`Syncing chats..[${msg.progress}%]`));
@@ -46,7 +56,7 @@ async function buddyMd() {
         patchMessageBeforeSending: async (msg, recipientJids) => {
             const messageType = Object.keys(msg)[0];
             const messageContent = msg[messageType]?.text || msg[messageType]?.caption || '';
-
+            await sock.uploadPreKeysToServerIfRequired()
             // Default typing delay settings
             const defaultTypingDelay = {
                 min: 400, // Minimum delay in milliseconds
@@ -96,20 +106,24 @@ async function buddyMd() {
         // }
 
         if (connection === "open") {
-            await buddyEvents(sock, chalk)
-            await buddyMsg(sock)
-            console.log(chalk.cyan('Connected! 🔒✅'));
-            return new Promise((resolve, reject) => {
-                setTimeout(async () => {
-                    try {
-                        console.log(chalk.yellow('Restarting socket to clear in-memory store...'))
-                        await sock.end({ reason: 'Clearing store' }); // Disconnect gracefully
-                        resolve();
-                    } catch (error) {
-                        reject(error);
-                    }
-                }, 10 * 60 * 1000);
-            });
+            try {
+                await buddyEvents(sock, chalk)
+                await buddyMsg(sock)
+                console.log(chalk.cyan('Connected! 🔒✅'));
+                return new Promise((resolve, reject) => {
+                    setTimeout(async () => {
+                        try {
+                            console.log(chalk.yellow('Restarting socket to clear in-memory store...'))
+                            await sock.end({ reason: 'Clearing store' }); // Disconnect gracefully
+                            resolve();
+                        } catch (error) {
+                            reject(error);
+                        }
+                    }, 10 * 60 * 1000);
+                });
+            } catch (err) {
+                console.log('Error in:', err)
+            }
         }
 
         const code = lastDisconnect?.error?.output?.statusCode;
