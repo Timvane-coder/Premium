@@ -1,29 +1,37 @@
 module.exports = {
-    usage: 'ping',
-    desc: "Check Buddy's response time and network speed!",
-    commandType: "Core",
-    isGroupOnly: false,
-    isAdminOnly: false,
-    emoji: '🏓', // Pong emoji (🏓)
+  usage: "ping",
+  desc: "Check Buddy's response time and network speed!",
+  commandType: "Core",
+  isGroupOnly: false,
+  isAdminOnly: false,
+  isPrivateOnly: false,
+  emoji: "🏓",
 
-    async execute(sock, m) {
-        const startTime = Date.now();
-        const sentMessage = await buddy.reply(m, '🏓 Pong!'); // Send initial "Pong!" message
+  async execute(sock, m) {
+    const startTime = Date.now();
+    const sentMessage = await buddy.reply(m, "🏓 Pong!");
 
-        // Measure round trip time
-        const roundTripTime = Date.now() - startTime;
+    const roundTripTime = Date.now() - startTime;
 
-        // Fetch connection information (if available)
-        const connectionInfo = sock?.state?.connection;
-        const connectionSpeed = connectionInfo ? `${connectionInfo.speed} kbps` : "Unknown";
+    const connectionInfo = sock?.state?.connection;
+    const connectionSpeed = connectionInfo ? `${connectionInfo.speed} kbps` : "Unknown";
 
-        const pingMessage = `
-🏓 *Pong!* 🏓
-  
-⏱️ *Round Trip Time:* ${roundTripTime} ms
-📶 *Connection Speed:* ${connectionSpeed}
-      `;
+    const { BOT_NAME, OWNER_NAME } = settings; // Include owner's name
 
-        await buddy.editMsg(m, sentMessage, pingMessage)
-    }
+    const pingMessage = `
+  💖 *𝓟𝓸𝓷𝓰!* 💖 
+    
+    \`\`\`
+Round Trip Time: ${roundTripTime} ms ⚡
+Connection Speed: ${connectionSpeed} 📶
+Bot Name: ${BOT_NAME} 🤖
+Owner Name: ${OWNER_NAME} 😎
+    \`\`\`
+    
+  Stay awesome! ✨
+    `;
+
+
+    await buddy.editMsg(m, sentMessage, pingMessage);
+  }
 };

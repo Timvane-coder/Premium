@@ -8,7 +8,9 @@ async function buddyCmdUpsert(sock, m) {
     }
 
     const { message } = m;
-    let text, conversation, caption;
+    let text = '';
+    let conversation = '';
+    let caption = '';
 
     // Check for extended text message
     if (message.extendedTextMessage) {
@@ -19,25 +21,31 @@ async function buddyCmdUpsert(sock, m) {
     conversation = message.conversation || '';
     caption = (message.videoMessage && message.videoMessage.caption) || (message.imageMessage && message.imageMessage.caption) || '';
 
-    const response = text || conversation || caption || ''; // Handle cases where all might be undefined
-    const prefix = '!';
-
+    const response = (text || conversation || caption).toLowerCase(); // Handle cases where all might be undefined
+    const prefix = settings.PREFIX.find(p => response.startsWith(p));
     if (response.startsWith(prefix)) {
         const commandName = response.slice(prefix.length).trim().split(' ')[0]; // Extract command name
         const command = commands[commandName];
 
         if (command) {
             try {
-                // Check if command is restricted to groups only
-                if (command.isGroupOnly && !m.key.remoteJid.endsWith('@g.us')) {
+                const sender = m.key.remoteJid.endsWith('@g.us') ? m.key.participant : m.key.remoteJid;
+                // Check if command is restricted to groups only or admin only
+                if (command.isAdminOnly && !m.key.fromMe && !settings.OWNER_NUMBERS.includes(sender + '@s.whatsapp.net')) {
+                    await buddy.reply(m, '⛔ *This command can only be used by bot Owners.*');
+                    return;
+                } else if (command.isGroupOnly && !m.key.remoteJid.endsWith('@g.us')) {
                     await buddy.reply(m, '⛔ *This command can only be used in groups.*');
+                    return;
+                } else if (command.isPrivateOnly && !m.key.remoteJid.endsWith('@s.whatsapp.net')) {
+                    await buddy.reply(m, '⛔ *This command can only be used in private chats.*');
                     return;
                 }
 
                 if (command.emoji) {
                     await buddy.react(m, command.emoji);
                 }
-                await command.execute(sock, m); // Execute the command
+                return await command.execute(sock, m); // Execute the command
             } catch (err) {
                 console.error("\x1b[31mError executing command:\x1b[0m", err);
                 await buddy.reply(m, 'An error occurred while processing your command.'); // Optional error message to user
