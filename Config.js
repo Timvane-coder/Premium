@@ -7,6 +7,7 @@ global.settings = {
     PREFIX: ["!", "/", "."], // Command prefix
     WELCOME_MESSAGE: "Hello! I'm BUDDY-MD, your friendly WhatsApp bot.",
     DEFAULT_TRANSLATION_LANG: "en",
+    MAX_DOWNLOAD_SIZE: 70,
     API_KEYS: {
         OPENWEATHERMAP_API_KEY: '', // Your OpenWeatherMap API key (if needed)
         // ... other API keys

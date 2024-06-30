@@ -1,9 +1,17 @@
 const { downloadContentFromMessage, downloadMediaMessage } = require('@whiskeysockets/baileys');
 const fs = require('fs');
 const { streamToBuffer } = require('./BuddyStreamToBuffer');
+const fancyScriptFonts = require('./BuddyFonts'); // Adjust the path as necessary
 
 const MAX_LISTENERS = 10;
 const listeners = [];
+
+/**
+ * Convert text to styled text using the fancyScriptFonts object.
+ * @param {string} text - The input text to style.
+ * @param {string} font - The font style to use from fancyScriptFonts.
+ * @returns {string} - The styled text.
+ */
 
 async function buddyMsg(sock) {
   const RED = "\x1b[31m";
@@ -59,9 +67,24 @@ async function buddyMsg(sock) {
         sendImage: async (m, bufferOrUrl, caption, asSticker = false) => {
           try {
             const jid = m.key.remoteJid;
-            const options = (typeof bufferOrUrl === 'string'
-              ? { image: bufferOrUrl, caption }
-              : { image: bufferOrUrl, caption });
+            let options = {};
+
+            if (typeof bufferOrUrl === 'string') {
+              options = {
+                image: {
+                  url: bufferOrUrl
+                },
+                caption: caption || ''
+              };
+            } else if (Buffer.isBuffer(bufferOrUrl)) {
+              options = {
+                image: bufferOrUrl,
+                caption: caption || ''
+              };
+            } else {
+              throw new Error('Invalid bufferOrUrl type. Expected string (URL) or Buffer.');
+            }
+
             return await sock.sendMessage(jid, options);
           } catch (err) {
             console.error(`${RED}Error in buddy.sendImage: ${err.message}${RESET}`);
@@ -72,18 +95,18 @@ async function buddyMsg(sock) {
             const jid = m.key.remoteJid;
             const options = (typeof bufferOrUrl === 'string'
               ? { video: bufferOrUrl, caption }
-              : { video: bufferOrUrl, caption });
+              : { video: { url: bufferOrUrl }, caption });
             return await sock.sendMessage(jid, options);
           } catch (err) {
             console.error(`${RED}Error in buddy.sendVideo: ${err.message}${RESET}`);
           }
         },
-        sendDocument: async (m, bufferOrUrl, mimetype, fileName) => {
+        sendDocument: async (m, bufferOrUrl, mimetype, fileName, caption) => {
           try {
             const jid = m.key.remoteJid;
             const options = typeof bufferOrUrl === 'string'
-              ? { document: bufferOrUrl, mimetype, fileName }
-              : { document: bufferOrUrl, mimetype, fileName };
+              ? { document: { url: bufferOrUrl }, mimetype, fileName, caption }
+              : { document: bufferOrUrl, mimetype, fileName, caption };
             return await sock.sendMessage(jid, options);
           } catch (err) {
             console.error(`${RED}Error in buddy.sendDocument: ${err.message}${RESET}`);
@@ -163,18 +186,19 @@ async function buddyMsg(sock) {
           try {
             return new Promise((resolve, reject) => {
               let timer;
-        
+
               if (timeout && timeout > 0) {
                 timer = setTimeout(() => {
+                  resolve(null)
                   sock.ev.off('messages.upsert', replyHandler);
                   reject(new Error('Timeout exceeded while waiting for response'));
                 }, timeout);
               }
-        
+
               const replyHandler = async ({ messages }) => {
                 const msg = messages[0];
                 const senderJid = key.key.remoteJid;
-        
+
                 if (
                   ((msg.message?.extendedTextMessage?.contextInfo?.stanzaId ||
                     msg.message?.conversation?.contextInfo?.stanzaId) === sentMessage.key.id) &&
@@ -183,25 +207,25 @@ async function buddyMsg(sock) {
                 ) {
                   if (timer) clearTimeout(timer);
                   await sock.ev.off('messages.upsert', replyHandler);
-        
+
                   const responseText = msg.message?.extendedTextMessage?.text || msg.message?.conversation;
                   const ownImplement = {
                     key: msg.key,
                     message: msg.message,
                     response: responseText
                   };
-        
+
                   resolve(ownImplement);
                 }
               };
-        
+
               // Add new listener and remove the oldest one if the limit is reached
               listeners.push(replyHandler);
               if (listeners.length > MAX_LISTENERS) {
                 const oldestListener = listeners.shift();
                 sock.ev.off('messages.upsert', oldestListener);
               }
-        
+
               sock.ev.on('messages.upsert', replyHandler);
             });
           } catch (err) {
@@ -336,6 +360,29 @@ async function buddyMsg(sock) {
             console.error(`${RED}Error in buddy.downloadMediaMessage: ${err.message}${RESET}`);
           }
         },
+        changeFont: async (text, font) => {
+          try {
+            // Validate inputs
+            if (typeof text !== 'string' || typeof font !== 'string') {
+              throw new Error("Both 'text' and 'font' must be of type string.");
+            }
+
+            const fontMap = fancyScriptFonts[font];
+            if (!fontMap) {
+              throw new Error(`Font '${font}' is not available in fancyScriptFonts.`);
+            }
+
+            // Simulate async operation (e.g., fetching font data)
+            await new Promise(resolve => setTimeout(resolve, 10));
+
+            // Convert text to styled text
+            return text.split('').map(char => fontMap[char] || char).join('');
+          } catch (error) {
+            // Handle errors
+            console.error("Error in changeFont:", error.message);
+            throw error;
+          }
+        }
       };
     }
   } catch (err) {
