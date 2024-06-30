@@ -1,4 +1,4 @@
-const { buddyCmdUpsert } = require('./BuddyCmd')
+const { buddyCmdUpsert } = require('./BuddyCmd');
 
 async function buddyEvents(sock, chalk) {
     // Handle messages.upsert event

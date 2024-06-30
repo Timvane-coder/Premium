@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const { buddyMd } = require('./src/Utils/Buddy');
 const path = require('path');
+const { buddyStatistic } = require('./src/Plugin/BuddyStatistic')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,10 +19,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/Public/index.html'));
 });
 
-app.get('/ownername', (req, res) => {
-    const m = global.settings.OWNER_NAME;
-    res.send(m);
-});
+
 
 // Improved Error Handling with More Detail
 app.use((err, req, res, next) => {
@@ -34,6 +32,7 @@ app.use((err, req, res, next) => {
 // Start the server
 (async () => {
     try {
+        buddyStatistic(app)
         server.listen(port, async () => { // Use 'server' instead of 'app'
             console.log(`Server is listening on port ${port}`);
             await buddyMd(); // Await the start of your news function
