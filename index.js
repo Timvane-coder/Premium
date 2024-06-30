@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { buddyMd } = require('./src/Utils/Buddy');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,9 +10,17 @@ const server = http.createServer(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Define your other routes 
+// Serve static files from the 'Public' folder
+app.use(express.static(path.join(__dirname, 'Public')));
+
+// Define your other routes
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/Public/index.html'); 
+    res.sendFile(path.join(__dirname, '/Public/index.html'));
+});
+
+app.get('/ownername', (req, res) => {
+    const m = global.settings.OWNER_NAME;
+    res.send(m);
 });
 
 // Improved Error Handling with More Detail
@@ -25,9 +34,9 @@ app.use((err, req, res, next) => {
 // Start the server
 (async () => {
     try {
-        await buddyMd(); // Await the start of your news function
-        server.listen(port, () => { // Use 'server' instead of 'app'
+        server.listen(port, async () => { // Use 'server' instead of 'app'
             console.log(`Server is listening on port ${port}`);
+            await buddyMd(); // Await the start of your news function
         });
     } catch (err) {
         console.error('Error starting server or news function:', err); // More descriptive error

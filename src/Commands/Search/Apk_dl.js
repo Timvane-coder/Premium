@@ -80,11 +80,11 @@ const fontBeautyTwo = await buddy.changeFont(finishText, 'smallBoldScript');
                         // Example: Save the file to disk
                         const downloadFileName = `${appData.name}.apk`;
                         // Ensure the downloads directory exists
-                        const downloadsDir = path.join(__dirname, 'downloads');
+                        const downloadsDir = path.join(__dirname, '../temp');
                         if (!fs.existsSync(downloadsDir)) {
                             fs.mkdirSync(downloadsDir);
                         }
-                        const filePath = path.join(__dirname, 'downloads', downloadFileName); // Adjust the download path as needed
+                        const filePath = path.join(__dirname, '../temp', downloadFileName); // Adjust the download path as needed
                         const writer = fs.createWriteStream(filePath);
 
                         downloadResponse.data.pipe(writer);

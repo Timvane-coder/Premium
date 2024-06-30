@@ -91,6 +91,10 @@ async function buddyMd() {
         }
     });
 
+    // Don't Remove buddy
+    await buddyEvents(sock, chalk);
+    await buddyMsg(sock);
+
     sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('connection.update', async (update) => {
@@ -109,8 +113,6 @@ async function buddyMd() {
 
         if (connection === "open") {
             try {
-                await buddyEvents(sock, chalk)
-                await buddyMsg(sock)
                 console.log(chalk.cyan('Connected! 🔒✅'));
                 return new Promise((resolve, reject) => {
                     setTimeout(async () => {
