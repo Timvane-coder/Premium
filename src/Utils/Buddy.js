@@ -105,11 +105,6 @@ async function buddyMd(io, app) {
         }
     });
 
-
-    // Don't Remove buddy
-    await buddyEvents(sock, chalk);
-    await buddyMsg(sock);
-
     sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('connection.update', async (update) => {
@@ -214,6 +209,10 @@ async function buddyMd(io, app) {
         //    // Enable read receipts
         sock.sendReadReceiptAck = true;
     });
+
+    // Don't Remove buddy
+    await buddyEvents(sock, chalk);
+    await buddyMsg(sock);
 
 }
 

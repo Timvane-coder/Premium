@@ -3,6 +3,7 @@ const http = require('http');
 const { buddyMd } = require('./src/Utils/Buddy');
 const path = require('path');
 const { buddyStatistic } = require('./src/Plugin/BuddyStatistic');
+const { checkFFmpeg } = require('./src/Plugin/BuddyModule');
 const socketIo = require('socket.io'); // Require Socket.IO
 
 const app = express();
@@ -44,6 +45,16 @@ app.use((err, req, res, next) => {
 (async () => {
     try {
         buddyStatistic(app, io);
+        // Main function to download ffmpeg
+        checkFFmpeg((isInstalled) => {
+            if (!isInstalled) {
+                checkDiskSpace((hasSpace) => {
+                    if (hasSpace) {
+                        downloadFFmpeg();
+                    }
+                });
+            }
+        });
         server.listen(port, async () => {
             console.log(`Server is listening on port ${port}`);
             await buddyMd(io, app);

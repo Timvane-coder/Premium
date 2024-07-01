@@ -43,11 +43,11 @@ module.exports = {
 
       if (imgbuff) {
         const newSticker = new Sticker(imgbuff, {
-          pack: 'Hacxk bot md',
-          author: 'HACXK',
+          pack: 'Buddy - MD',
+          author: 'BUDDY',
           type: 'full',
           categories: ['🐱', '😎'], // Add sticker categories if needed
-          quality: 70
+          quality: 90
         });
 
         const stickerBuffer = await newSticker.build(); // Ensure to build the sticker

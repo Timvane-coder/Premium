@@ -115,16 +115,6 @@ async function buddyEvents(sock, chalk) {
         }
     });
 
-    // Handle connection.update event
-    sock.ev.on('connection.update', async (connectionState) => {
-        try {
-            console.log(chalk.blueBright(`🌐 Connection update:`), JSON.stringify(connectionState));
-            // Implement your logic for connection updates
-        } catch (error) {
-            console.error(chalk.red(`❌ Error handling connection.update event:`, error));
-        }
-    });
-
     // Handle creds.update event
     sock.ev.on('creds.update', async (credentials) => {
         try {
