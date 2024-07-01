@@ -2,11 +2,13 @@ const express = require('express');
 const http = require('http');
 const { buddyMd } = require('./src/Utils/Buddy');
 const path = require('path');
-const { buddyStatistic } = require('./src/Plugin/BuddyStatistic')
+const { buddyStatistic } = require('./src/Plugin/BuddyStatistic');
+const socketIo = require('socket.io'); // Require Socket.IO
 
 const app = express();
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
+const io = socketIo(server); // Initialize Socket.IO with the HTTP server
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +22,15 @@ app.get('/', (req, res) => {
 });
 
 
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+    console.log('A user connected'); // Log when a user connects
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
 
 // Improved Error Handling with More Detail
 app.use((err, req, res, next) => {
@@ -32,12 +43,12 @@ app.use((err, req, res, next) => {
 // Start the server
 (async () => {
     try {
-        buddyStatistic(app)
-        server.listen(port, async () => { // Use 'server' instead of 'app'
+        buddyStatistic(app, io);
+        server.listen(port, async () => {
             console.log(`Server is listening on port ${port}`);
-            await buddyMd(); // Await the start of your news function
+            await buddyMd(io, app);
         });
     } catch (err) {
-        console.error('Error starting server or news function:', err); // More descriptive error
+        console.error('Error starting server or news function:', err);
     }
 })();

@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
         chart.update(); // Update the chart
     }
 
+    updateCharts(); // Fetch initial data on page load
+    
     // Function to fetch and update real data from server
     async function updateCharts() {
         try {
@@ -117,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Default chart shown on page load
     currentChart = ramChart;
-    updateCharts(); // Fetch initial data on page load
 
     // Automatically update charts every 10 seconds
     setInterval(updateCharts, 30000); // Adjust the interval as needed
@@ -162,3 +163,4 @@ function getChartOptions(title) {
         }
     };
 }
+

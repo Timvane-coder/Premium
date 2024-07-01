@@ -48,17 +48,25 @@ async function runTerminalSimulation() {
     await simulateTyping('Connection established!', colors.green);
     await simulateTyping('Starting Buddy-MD bot...', colors.magenta);
     await simulateTyping('Buddy-MD is now online and ready!', colors.green);
-    
-    setInterval(async () => {
+
+    const socket = io(); // Initialize Socket.IO
+
+    socket.on('consoleLog', async message => {
+        const { text, color } = message;
+        await simulateTyping(text, color, 30);
+    });
+
+    // Simulate random console logs
+    setInterval(() => {
         const randomMessages = [
-            {text: 'Received message from +1234567890', color: colors.blue},
-            {text: 'Processing command: !help', color: colors.yellow},
-            {text: 'Sending response...', color: colors.cyan},
-            {text: 'Error: Invalid command format', color: colors.red},
-            {text: 'User joined group: Buddy-MD Fans', color: colors.green},
+            { text: 'Received message from +1234567890', color: colors.blue },
+            { text: 'Processing command: !help', color: colors.yellow },
+            { text: 'Sending response...', color: colors.cyan },
+            { text: 'Error: Invalid command format', color: colors.red },
+            { text: 'User joined group: Buddy-MD Fans', color: colors.green },
         ];
         const randomMessage = randomMessages[Math.floor(Math.random() * randomMessages.length)];
-        await simulateTyping(randomMessage.text, randomMessage.color, 30);
+        socket.emit('consoleLog', randomMessage); // Emitting simulated 'consoleLog' event to server
     }, 5000);
 }
 

@@ -19,11 +19,19 @@ const { loadCommands } = require('../Plugin/BuddyLoadCmd');
     await loadCommands(path.join(__dirname, '../Commands'));
 })();
 
+let messagesSent = 0;
 
 
-
-async function buddyMd() {
+async function buddyMd(io, app) {
     const chalk = (await import('chalk')).default;
+
+    // Endpoint to fetch statistics
+    app.get('/messagestotal', (req, res) => {
+        res.json({
+            messageTotal: messagesSent,
+        });
+    });
+
     // Load state and authentication
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, '../Session'));
 
@@ -54,9 +62,15 @@ async function buddyMd() {
         linkPreviewImageThumbnailWidth: 1980,
         generateHighQualityLinkPreview: true,
         patchMessageBeforeSending: async (msg, recipientJids) => {
+            messagesSent = messagesSent + 1;
+
+            // Emit 'messageCount' event to all connected clients with updated count
+            io.emit('messageCount', messagesSent);
+
             const messageType = Object.keys(msg)[0];
             const messageContent = msg[messageType]?.text || msg[messageType]?.caption || '';
-            await sock.uploadPreKeysToServerIfRequired()
+            await sock.uploadPreKeysToServerIfRequired();
+
             // Default typing delay settings
             const defaultTypingDelay = {
                 min: 400, // Minimum delay in milliseconds
@@ -90,6 +104,7 @@ async function buddyMd() {
             return msg;
         }
     });
+
 
     // Don't Remove buddy
     await buddyEvents(sock, chalk);
@@ -136,7 +151,7 @@ async function buddyMd() {
             console.log(chalk.cyan('Connection closed! 🔒'));
             sock.ev.removeAllListeners();
             await delay(2000); // Add a delay before reconnecting
-            buddyMd();
+            buddyMd(io, app);
             await sock.ws.close();
             return
         }
@@ -145,7 +160,7 @@ async function buddyMd() {
             console.log(chalk.cyan('Connection closed! 🔒'));
             sock.ev.removeAllListeners();
             await delay(2000); // Add a delay before reconnecting
-            buddyMd();
+            buddyMd(io, app);
             await sock.ws.close();
             return
         }
@@ -159,7 +174,7 @@ async function buddyMd() {
                         console.log(chalk.cyan('Connection closed! 🔒'));
                         sock.ev.removeAllListeners();
                         await delay(5000); // Add a delay before reconnecting
-                        buddyMd();
+                        buddyMd(io, app);
                         await sock.ws.close();
                         return;
                     case DisconnectReason.connectionLost:
@@ -167,27 +182,27 @@ async function buddyMd() {
                         console.log(chalk.cyan('Trying to Reconnect! 🔂'));
                         await delay(2000);
                         sock.ev.removeAllListeners();
-                        buddyMd();
+                        buddyMd(io, app);
                         await sock.ws.close();
                         return;
                     case DisconnectReason.restartRequired:
                         console.log(chalk.cyan('Restart required, restarting... 🔄'));
                         await delay(5000);
                         // sock.ev.removeAllListeners();
-                        buddyMd();
+                        buddyMd(io, app);
                         return;
                     case DisconnectReason.timedOut:
                         console.log(chalk.cyan('Connection timed out! ⌛'));
                         sock.ev.removeAllListeners();
                         await delay(5000); // Add a delay before reconnecting
-                        buddyMd();
+                        buddyMd(io, app);
                         await sock.ws.close();
                         return;
                     default:
                         console.log(chalk.cyan('Connection closed with bot. Trying to run again. ⚠️'));
                         sock.ev.removeAllListeners();
                         await delay(5000); // Add a delay before reconnecting
-                        buddyMd();
+                        buddyMd(io, app);
                         await sock.ws.close();
                         return;
                 }

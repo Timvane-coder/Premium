@@ -1,7 +1,6 @@
-const os = require('os')
+const os = require('os');
 
-
-async function buddyStatistic(app) {
+async function buddyStatistic(app, io) {
     // Middleware to log request start time
     app.use((req, res, next) => {
         req.startTime = Date.now();
@@ -20,8 +19,8 @@ async function buddyStatistic(app) {
     });
 
     app.get('/ownername', (req, res) => {
-        const m = global.settings.OWNER_NAME;
-        res.send(m);
+        const ownerName = global.settings.OWNER_NAME;
+        res.send(ownerName);
     });
 
     let prevNetworkUsage = { totalRx: 0, totalTx: 0 };
@@ -35,7 +34,7 @@ async function buddyStatistic(app) {
         Object.keys(interfaces).forEach(ifaceName => {
             const iface = interfaces[ifaceName];
             iface.forEach(entry => {
-                if (!entry.internal && entry.operfamily === 'IPv4') { // Skip internal and non-IPv4 interfaces
+                if (!entry.internal && entry.family === 'IPv4') { // Skip internal and non-IPv4 interfaces
                     totalRx += entry.rx_bytes || 0; // Received bytes
                     totalTx += entry.tx_bytes || 0; // Sent bytes
                 }
@@ -72,6 +71,22 @@ async function buddyStatistic(app) {
 
         res.json({ ramUsage, diskUsage, networkSpeed });
     });
+
+    // Emit 'console.log' messages to all connected clients
+    function sendConsoleLog(text, color = 'reset') {
+        io.emit('consoleLog', { text, color }); // Emitting 'consoleLog' event to all clients with text and color
+    }
+
+    // Override console.log to also emit via Socket.IO
+    const originalConsoleLog = console.log;
+    console.log = (...args) => {
+        const message = args.map(arg => (typeof arg === 'object' ? JSON.stringify(arg) : arg)).join(' ');
+        sendConsoleLog(message); // Send console log message to clients
+        originalConsoleLog(...args); // Log to server console as usual
+    };
+
+    // Emit 'messageCount' event to all connected clients with updated count
+    // Assuming 'logs' is defined elsewhere in your code
 
 }
 
