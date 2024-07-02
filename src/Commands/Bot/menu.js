@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const os = require('os'); // Import the os module
-const { commands } = require('../../Plugin/BuddyLoadCmd'); // Assuming BuddyLoadCmd loads your commands
+const os = require('os');
+const { commands } = require('../../Plugin/BuddyLoadCmd');
 
 module.exports = {
   usage: ["menu", "help"],
@@ -16,49 +16,45 @@ module.exports = {
     try {
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/Menu2.jpeg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      const owner = settings.OWNER_NAME;
-      const botName = settings.BOT_NAME;
-      const prefix = settings.PREFIX[0];
-      const lang = settings.DEFAULT_TRANSLATION_LANG;
 
-      // Calculate uptime and command count
-      const uptimeSeconds = os.uptime();
-      const uptimeHours = Math.floor(uptimeSeconds / 3600);
-      const uptimeMinutes = Math.floor((uptimeSeconds % 3600) / 60);
-      const uptime = `${uptimeHours}h ${uptimeMinutes}m`;
+      // Function to format commands, handling missing types
+      const formatCommandsByType = (commands) => {
+        const commandsByType = {};
+        Object.values(commands).forEach(cmd => {
+          const type = cmd.commandType || "Uncategorized"; // Default to "Uncategorized" if type is missing
+          commandsByType[type] = commandsByType[type] || [];
+          commandsByType[type].push(`${settings.PREFIX[0]}${cmd.usage.join(`\n${settings.PREFIX[0]}`)}`);
+        });
 
-      // Dynamically count user-facing commands
-      const userCommandCount = Object.values(commands).filter(
-        cmd => cmd.commandType === 'user' || cmd.commandType === 'Bot'
-      ).length;
+        let formattedCommands = '';
+        for (const [type, cmds] of Object.entries(commandsByType)) {
+          formattedCommands += `\n\n───「 ◈ *${type.toUpperCase()} COMMANDS:* 」\n\n${cmds.join('\n')}`;
+        }
+        return formattedCommands;
+      };
 
-      // Build menu header text
+      // Build menu header text with dynamic uptime calculation
+      const uptimeHours = Math.floor(os.uptime() / 3600);
+      const uptimeMinutes = Math.floor((os.uptime() % 3600) / 60);
       const men = `╭────「 *BUDDY MENU* 」
-│ ◈ *BOTNAME:* ${botName}
-│ ◈ *OWNER:* ${owner}
-│ ◈ *LANGUAGE:* ${lang}
-│ ◈ *PREFIX:* ${prefix}
-│ ◈ *UPTIME:* ${uptime}
-│ ◈ *COMMANDS:* ${userCommandCount}
-╰──────────●●►\n\n`;
+│ ◈ *BOTNAME:* ${settings.BOT_NAME}
+│ ◈ *OWNER:* ${settings.OWNER_NAME}
+│ ◈ *LANGUAGE:* ${settings.DEFAULT_TRANSLATION_LANG}
+│ ◈ *PREFIX:* ${settings.PREFIX[0]}
+│ ◈ *UPTIME:* ${uptimeHours} hours ${uptimeMinutes} minutes
+╰──────────●●►\n
+Hey there! Here’s what I can do for you:\n`;
 
-      // Build command list dynamically
-      const formattedCommands = [];
-      for (const commandKey in commands) {
-        const command = commands[commandKey];
-        formattedCommands.push(
-          `║ ${command.emoji} *${command.usage.join(', ')}* - ${command.desc}`
-        );
-      }
+      // Apply font changes concurrently
+      const [menuTextStyled, menTextStyled] = await Promise.all([
+        buddy.changeFont(formatCommandsByType(commands), 'smallBoldScript'),
+        buddy.changeFont(men, 'boldBigScript')
+      ]);
 
-      // Apply font changes (await the results)
-      const menuTextPromise = buddy.changeFont(formattedCommands.join('\n\n'), 'smallBoldScript');
-      const menTextPromise = buddy.changeFont(men, 'boldBigScript');
-      const [menuText, menText] = await Promise.all([menuTextPromise, menTextPromise]);
-
-      // Combine text and send
-      const completeMenu = menText + '\n\n' + menuText;
+      // Send the combined menu
+      const completeMenu = menTextStyled + menuTextStyled;
       await buddy.sendImage(m, menuImageBuffer, completeMenu);
+
     } catch (error) {
       console.error("Error displaying menu:", error.message);
       await buddy.reply(m, "An error occurred while displaying the menu. Please try again later.");
