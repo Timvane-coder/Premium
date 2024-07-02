@@ -440,7 +440,6 @@ async function buddyMsg(sock) {
                 (msg.key.remoteJid.endsWith('@g.us') ? msg.key.participant : msg.key.remoteJid)
               ) {
                 if (timer) clearTimeout(timer);
-                await sock.ev.off('messages.upsert', replyHandler);
 
                 const responseText = msg.message?.extendedTextMessage?.text || msg.message?.conversation;
                 const ownImplement = {

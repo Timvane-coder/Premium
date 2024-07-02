@@ -87,25 +87,36 @@ module.exports = {
             const responseMessage = await buddy.getResponseText(m, sentMessage);
             if (responseMessage) {
                 await buddy.react(m, emojis.option);
-                const chosenOption = responseMessage.response.toLowerCase();
+                let chosenOption = responseMessage.response.toLowerCase();
                 await buddy.react(m, emojis.processing);
 
                 let downloadUrl, fileExtension;
-                switch (chosenOption) {
-                    case 'a':
-                        downloadUrl = videoInfo.download.find(item => item.type === 'audio').link;
-                        fileExtension = 'mp3';
-                        break;
-                    case 'vw':
-                        downloadUrl = videoInfo.download.find(item => item.type === 'watermark').link;
-                        fileExtension = 'mp4';
-                        break;
-                    case 'v':
-                        downloadUrl = videoInfo.download.find(item => item.type === 'no-watermark').link;
-                        fileExtension = 'mp4';
-                        break;
-                    default:
-                        return await buddy.reply(m, "❌ Invalid option. Please choose a valid option (a, vw, or v).");
+
+                // Repeat until a valid option is chosen
+                while (true) {
+                    switch (chosenOption) {
+                        case 'a':
+                            downloadUrl = videoInfo.download.find(item => item.type === 'audio').link;
+                            fileExtension = 'mp3';
+                            break;
+                        case 'vw':
+                            downloadUrl = videoInfo.download.find(item => item.type === 'watermark').link;
+                            fileExtension = 'mp4';
+                            break;
+                        case 'v':
+                            downloadUrl = videoInfo.download.find(item => item.type === 'no-watermark').link;
+                            fileExtension = 'mp4';
+                            break;
+                        default:
+                            await buddy.reply(m, "❌ Invalid option. Please choose a valid option (a, vw, or v).");
+                            // Prompt again for a valid option
+                            const newResponseMessage = await buddy.getResponseText(m, sentMessage);
+                            chosenOption = newResponseMessage.response.toLowerCase();
+                            continue; // Continue the loop to re-evaluate the chosen option
+                    }
+
+                    // Break out of the loop once a valid option is chosen
+                    break;
                 }
 
                 // Download the file

@@ -152,7 +152,7 @@ module.exports = {
             const responseMessage = await buddy.getResponseText(m, sentMessage); // 15 seconds timeout
             if (responseMessage) {
                 await buddy.react(m, emojis.option);
-                const chosenOption = responseMessage.response;
+                let chosenOption = responseMessage.response;
 
                 let format = 'sd'; // Default to SD
                 if (chosenOption === '2' && apiResponse.data.data.hdLink) {

@@ -16,7 +16,7 @@ const emojis = {
 };
 
 module.exports = {
-    usage: ["video"],
+    usage: ["videos"],
     desc: "Search for YouTube videos and download them.",
     commandType: "Download",
     isGroupOnly: false,
@@ -89,17 +89,24 @@ module.exports = {
             const responseMessage = await buddy.getResponseText(m, sentMessage);
             if (responseMessage) {
                 await buddy.react(m, emojis.option);
-                const chosenOption = responseMessage.response.toLowerCase();
+                let chosenOption = responseMessage.response.toLowerCase();
                 await buddy.react(m, emojis.processing);
-
-                if (chosenOption !== 'v1' && chosenOption !== 'v2') {
-                    return await buddy.reply(m, "❌ Invalid option. Please choose a valid option (v1 or v2).");
+            
+                while (true) {
+                    if (chosenOption !== 'v1' && chosenOption !== 'v2') {
+                        await buddy.reply(m, "❌ Invalid option. Please choose a valid option (v1 or v2).");
+                        const newResponseMessage = await buddy.getResponseText(m, sentMessage); // Prompt again
+                        chosenOption = newResponseMessage.response.toLowerCase();
+                    } else {
+                        break; // Break the loop if the option is valid
+                    }
                 }
+                  
 
                 try {
                     const info = await ytdl.getInfo(video.url);
                     const format = ytdl.chooseFormat(info.formats, { quality: 'highestvideo' });
-                    
+
                     if (format.contentLength > MAXDLSIZE) {
                         await buddy.react(m, emojis.warning);
                         return await buddy.reply(m, `${emojis.warning} The file size (${(format.contentLength / 1024 / 1024).toFixed(2)} MB) exceeds the maximum allowed size (${settings.MAX_DOWNLOAD_SIZE} MB).`);

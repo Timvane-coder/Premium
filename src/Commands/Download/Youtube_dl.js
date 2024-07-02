@@ -91,28 +91,39 @@ module.exports = {
             await buddy.react(m, emojis.downloadChoice);
 
             const responseMessage = await buddy.getResponseText(m, sentMessage);
+
             if (responseMessage) {
                 await buddy.react(m, emojis.option);
-                const chosenOption = responseMessage.response.toLowerCase();
+                let chosenOption = responseMessage.response.toLowerCase();
                 await buddy.react(m, emojis.processing);
 
                 let mediaType, quality, fileFormat;
-                if (chosenOption === 'a1' || chosenOption === 'a2') {
-                    mediaType = 'audio';
-                    quality = 'highestaudio';
-                    fileFormat = 'mp3';
-                } else if (chosenOption === 'v1' || chosenOption === 'v2') {
-                    mediaType = 'video';
-                    quality = 'highestvideo';
-                    fileFormat = 'mp4';
-                } else {
-                    return await buddy.reply(m, "❌ Invalid option. Please choose a valid option (a1, a2, v1, or v2).");
+
+                while (true) {
+                    if (chosenOption === 'a1' || chosenOption === 'a2') {
+                        mediaType = 'audio';
+                        quality = 'highestaudio';
+                        fileFormat = 'mp3';
+                        break; // Break the loop as the response is valid
+                    } else if (chosenOption === 'v1' || chosenOption === 'v2') {
+                        mediaType = 'video';
+                        quality = 'highestvideo';
+                        fileFormat = 'mp4';
+                        break; // Break the loop as the response is valid
+                    } else {
+                        await buddy.reply(m, "❌ Invalid option. Please choose a valid option (a1, a2, v1, or v2).");
+                        const newResponseMessage = await buddy.getResponseText(m, sentMessage); // Prompt again
+                        chosenOption = newResponseMessage.response.toLowerCase();
+                    }
                 }
+
+                // Continue with your logic using mediaType, quality, and fileFormat
+                await buddy.react(m, emojis.success);
 
                 try {
                     const info = await ytdl.getInfo(video.url);
                     const format = ytdl.chooseFormat(info.formats, { quality: quality });
-                    
+
                     if (format.contentLength > MAXDLSIZE) {
                         await buddy.react(m, emojis.warning);
                         return await buddy.reply(m, `${emojis.warning} The file size (${(format.contentLength / 1024 / 1024).toFixed(2)} MB) exceeds the maximum allowed size (${settings.MAX_DOWNLOAD_SIZE} MB).`);
@@ -136,7 +147,7 @@ module.exports = {
                             const emptyBlocks = 10 - filledBlocks;
                             const progressEmoji = '🟩'.repeat(filledBlocks) + '🟥'.repeat(emptyBlocks);
 
-                           //  buddy.editMsg(m, progressMessage, `${emojis.processing} Downloading... ${progressPercent}% ${progressEmoji}`);
+                            //  buddy.editMsg(m, progressMessage, `${emojis.processing} Downloading... ${progressPercent}% ${progressEmoji}`);
                         })
                         .pipe(fs.createWriteStream(tempPath))
                         .on('finish', async () => {

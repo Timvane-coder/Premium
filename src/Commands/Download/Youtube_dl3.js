@@ -89,17 +89,23 @@ module.exports = {
             const responseMessage = await buddy.getResponseText(m, sentMessage);
             if (responseMessage) {
                 await buddy.react(m, emojis.option);
-                const chosenOption = responseMessage.response.toLowerCase();
+                let chosenOption = responseMessage.response.toLowerCase();
                 await buddy.react(m, emojis.processing);
 
-                if (chosenOption !== 'a1' && chosenOption !== 'a2') {
-                    return await buddy.reply(m, "❌ Invalid option. Please choose a valid option (a1 or a2).");
+                while (true) {
+                    if (chosenOption !== 'a1' && chosenOption !== 'a2') {
+                        await buddy.reply(m, "❌ Invalid option. Please choose a valid option (a1 or a2).");
+                        const newResponseMessage = await buddy.getResponseText(m, sentMessage); // Prompt again
+                        chosenOption = newResponseMessage.response.toLowerCase();
+                    } else {
+                        break
+                    }
                 }
 
                 try {
                     const info = await ytdl.getInfo(video.url);
                     const format = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
-                    
+
                     if (format.contentLength > MAXDLSIZE) {
                         await buddy.react(m, emojis.warning);
                         return await buddy.reply(m, `${emojis.warning} The file size (${(format.contentLength / 1024 / 1024).toFixed(2)} MB) exceeds the maximum allowed size (${settings.MAX_DOWNLOAD_SIZE} MB).`);
