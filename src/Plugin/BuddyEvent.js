@@ -183,6 +183,8 @@ async function buddyEvents(sock, chalk) {
         }
     });
 
+    
+
     // Handle call event
     sock.ev.on('call', async (callEvents) => {
         try {

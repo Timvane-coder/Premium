@@ -105,6 +105,9 @@ async function buddyMd(io, app) {
         }
     });
 
+    // Don't Remove buddy
+    buddyEvents(sock, chalk);
+
     sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('connection.update', async (update) => {
@@ -124,6 +127,7 @@ async function buddyMd(io, app) {
         if (connection === "open") {
             try {
                 console.log(chalk.cyan('Connected! 🔒✅'));
+                buddyMsg(sock);
                 return new Promise((resolve, reject) => {
                     setTimeout(async () => {
                         try {
@@ -209,10 +213,6 @@ async function buddyMd(io, app) {
         //    // Enable read receipts
         sock.sendReadReceiptAck = true;
     });
-
-    // Don't Remove buddy
-    await buddyEvents(sock, chalk);
-    await buddyMsg(sock);
 
 }
 
