@@ -68,7 +68,7 @@ module.exports = {
         if (mediabuff) {
           await buddy.react(m, '⏳'); // React with an hourglass for processing
 
-          const tempDir = path.join(__dirname, '../temp');
+          const tempDir = path.join('./temp');
           if (!fs.existsSync(tempDir)) {
             fs.mkdirSync(tempDir);
           }

@@ -52,7 +52,7 @@ module.exports = {
           return;
         }
 
-        const tempDir = path.join(__dirname, '../temp');
+        const tempDir = path.join('./temp');
         if (!fs.existsSync(tempDir)) {
           fs.mkdirSync(tempDir);
         }

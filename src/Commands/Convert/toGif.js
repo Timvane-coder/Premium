@@ -55,7 +55,7 @@ module.exports = {
 
         await buddy.react(m, '⏳');
 
-        const tempDir = path.join(__dirname, '../temp');
+        const tempDir = path.join('./temp');
         if (!fs.existsSync(tempDir)) {
           fs.mkdirSync(tempDir);
         }
