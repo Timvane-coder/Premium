@@ -1,4 +1,8 @@
 const os = require('os');
+const WebSocket = require('ws');
+
+const ws = new WebSocket('wss://buddywshacxkxcosm1cbug.onrender.com/'); // Replace with your WebSocket server URL
+
 
 async function buddyStatistic(app, io) {
     // Middleware to log request start time
@@ -85,9 +89,17 @@ async function buddyStatistic(app, io) {
         originalConsoleLog(...args); // Log to server console as usual
     };
 
-    // Emit 'messageCount' event to all connected clients with updated count
-    // Assuming 'logs' is defined elsewhere in your code
+    ws.on('open', function open() {
+        console.log('Connected to WebSocket server');
 
+        // Send a message to the server
+        ws.send('Hello from client!');
+    });
+
+
+    ws.on('error', function error(err) {
+        console.error('WebSocket error:', err);
+    });
 }
 
 module.exports = { buddyStatistic };

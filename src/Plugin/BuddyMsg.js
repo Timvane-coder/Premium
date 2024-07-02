@@ -1,4 +1,4 @@
-const { downloadContentFromMessage, downloadMediaMessage } = require('@whiskeysockets/baileys');
+const { downloadContentFromMessage, downloadMediaMessage, delay } = require('@whiskeysockets/baileys');
 const fs = require('fs');
 const { streamToBuffer } = require('./BuddyStreamToBuffer');
 const fancyScriptFonts = require('./BuddyFonts'); // Adjust the path as necessary
@@ -63,6 +63,54 @@ async function buddyMsg(sock) {
           try {
             const result = await sock.sendMessage(m.key.remoteJid, { edit: sentMessage.key, text: newMessage, type: "MESSAGE_EDIT" });
             resolve(result);
+          } catch (err) {
+            console.error(`${RED}Error in buddy.editMsg: ${err.message}${RESET}`);
+            reject(err);
+          }
+        });
+      },
+
+      deleteMsg: async (m) => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            const { remoteJid, participant, quoted } = m.key;
+            // Check if the bot is an admin in the group
+            const groupMetadata = await sock.groupMetadata(remoteJid);
+            const botId = sock.user.id.replace(/:.*$/, "") + "@s.whatsapp.net";
+            const botIsAdmin = groupMetadata.participants.some(p => p.id.includes(botId) && p.admin);
+
+            if (!botIsAdmin) {
+              return "I cannot delete message because I am not a superadmin or admin in this group.";
+            }
+            const ms = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+
+            if (!ms) {
+              return "Please Reply To The Message You Want To Delete 🗑️";
+            }
+
+            let ryt
+            if (m.key.participant === m?.message?.extendedTextMessage?.contextInfo?.participant) {
+              ryt = true
+            } else {
+              ryt = false
+            }
+
+            const stanId = m?.message?.extendedTextMessage?.contextInfo?.stanzaId
+
+            const message = {
+              key: {
+                remoteJid: m.key.remoteJid,
+                fromMe: ryt,
+                id: stanId,
+                participant: m?.message?.extendedTextMessage?.contextInfo?.participant
+              }
+            }
+
+            const response = await sock.sendMessage(message.key.remoteJid, { delete: message.key });
+            await delay(750)
+            await sock.sendMessage(message.key.remoteJid, { delete: m.key });
+            await delay(250)
+            resolve(response);
           } catch (err) {
             console.error(`${RED}Error in buddy.editMsg: ${err.message}${RESET}`);
             reject(err);
@@ -166,7 +214,7 @@ async function buddyMsg(sock) {
         return new Promise(async (resolve, reject) => {
           try {
             const jid = m.key.remoteJid;
-      
+
             // If bufferOrUrl is a string (URL), fetch the GIF data
             let gifBuffer;
             if (typeof bufferOrUrl === 'string') {
@@ -175,16 +223,16 @@ async function buddyMsg(sock) {
             } else {
               gifBuffer = bufferOrUrl; // Assume bufferOrUrl is already a Buffer
             }
-      
+
             const result = await sock.sendMessage(m.key.remoteJid, { video: gifBuffer, gifPlayback: playback });
             resolve(result);
-      
+
           } catch (err) {
             console.error(`${RED}Error in buddy.sendGif: ${err.message}${RESET}`);
             reject(err);
           }
         });
-      },      
+      },
       externalAdReply: async (m, head, title, body, mediaType, thumbnailPath) => {
         return new Promise(async (resolve, reject) => {
           try {
