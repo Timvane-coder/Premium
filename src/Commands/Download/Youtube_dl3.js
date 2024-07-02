@@ -105,7 +105,7 @@ module.exports = {
                         return await buddy.reply(m, `${emojis.warning} The file size (${(format.contentLength / 1024 / 1024).toFixed(2)} MB) exceeds the maximum allowed size (${settings.MAX_DOWNLOAD_SIZE} MB).`);
                     }
 
-                    const tempDir = path.join(__dirname, '../temp');
+                    const tempDir = path.join('./temp');
                     if (!fs.existsSync(tempDir)) {
                         fs.mkdirSync(tempDir);
                     }

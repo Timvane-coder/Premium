@@ -67,7 +67,7 @@ module.exports = {
 
             const beautifulFont = await buddy.changeFont(downloadOptions, 'smallBoldScript');
 
-            const tempDir = path.join(__dirname, '../temp');
+            const tempDir = path.join('./temp');
             try {
                 await fs.access(tempDir); // Check if directory exists
             } catch (error) {

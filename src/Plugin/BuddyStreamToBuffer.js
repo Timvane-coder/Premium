@@ -15,4 +15,21 @@ async function streamToBuffer(stream) {
     });
 }
 
-module.exports = { streamToBuffer };
+const writeTempFile = (tempDir, bufferData, filename, resolve, reject) => {
+    const tempFilePath = path.join(tempDir, filename);
+    fs.writeFile(tempFilePath, bufferData, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        fs.readFile(tempFilePath, (err, fileContent) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(fileContent);
+          }
+        });
+      }
+    });
+  };
+
+module.exports = { streamToBuffer, writeTempFile };

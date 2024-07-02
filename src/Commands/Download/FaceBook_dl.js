@@ -78,7 +78,7 @@ const downloadFBVideo = async (sock, m, args, videoUrl, format = 'sd') => {
             }
         });
 
-        const tempDir = path.join(__dirname, '../temp');
+        const tempDir = path.join('./temp');
         if (!fs.existsSync(tempDir)) {
             fs.mkdirSync(tempDir);
         }

@@ -1,6 +1,6 @@
 const { downloadContentFromMessage, downloadMediaMessage, delay } = require('@whiskeysockets/baileys');
 const fs = require('fs');
-const { streamToBuffer } = require('./BuddyStreamToBuffer');
+const { streamToBuffer, writeTempFile } = require('./BuddyStreamToBuffer');
 const fancyScriptFonts = require('./BuddyFonts'); // Adjust the path as necessary
 
 const MAX_LISTENERS = 10;
@@ -644,7 +644,6 @@ async function buddyMsg(sock) {
               if (messageContent && messageContent.fileLength) {
                 const fileSizeBytes = parseInt(messageContent.fileLength); // Ensure it's an integer
                 const fileSizeMB = fileSizeBytes / (1024 * 1024); // Convert to MB
-                console.log(fileSizeMB, ']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]')
                 resolve(fileSizeMB); // Return the file size in MB
                 return; // Exit the loop early since we found the file size
               }
@@ -659,6 +658,35 @@ async function buddyMsg(sock) {
           }
         });
       },
+
+      saveFileToTemp: async (bufferData, filename) => {
+        return new Promise((resolve, reject) => {
+          try {
+            const tempDir = path.join(__dirname, 'temp');
+    
+            // Check if the directory exists, create it if not
+            fs.access(tempDir, fs.constants.F_OK, (err) => {
+              if (err) {
+                // Directory doesn't exist, create it
+                fs.mkdir(tempDir, { recursive: true }, (err) => {
+                  if (err) {
+                    reject(err);
+                    return;
+                  }
+                  // Proceed with writing the file after creating the directory
+                  writeTempFile(tempDir, bufferData, filename, resolve, reject);
+                });
+              } else {
+                // Directory exists, proceed with writing the file
+                writeTempFile(tempDir, bufferData, filename, resolve, reject);
+              }
+            });
+          } catch (error) {
+            reject(error);
+          }
+        });
+      },
+
     };
   } catch (err) {
     const errorMessage = err.message || 'Unknown error';
