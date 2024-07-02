@@ -14,6 +14,7 @@ const logger = pino({ level: 'silent' });
 const { buddyMsg } = require('../Plugin/BuddyMsg');
 const { buddyEvents } = require('../Plugin/BuddyEvent');
 const { loadCommands } = require('../Plugin/BuddyLoadCmd');
+const { againstEvent } = require('../Plugin/BuddyEventHandle');
 
 (async () => {
     await loadCommands(path.join(__dirname, '../Commands'));
@@ -62,50 +63,52 @@ async function buddyMd(io, app) {
         linkPreviewImageThumbnailWidth: 1980,
         generateHighQualityLinkPreview: true,
         patchMessageBeforeSending: async (msg, recipientJids) => {
-            messagesSent = messagesSent + 1;
-
-            // Emit 'messageCount' event to all connected clients with updated count
-            io.emit('messageCount', messagesSent);
-
-            const messageType = Object.keys(msg)[0];
-            const messageContent = msg[messageType]?.text || msg[messageType]?.caption || '';
             await sock.uploadPreKeysToServerIfRequired();
+            // messagesSent = messagesSent + 1;
 
-            // Default typing delay settings
-            const defaultTypingDelay = {
-                min: 400, // Minimum delay in milliseconds
-                max: 800, // Maximum delay in milliseconds
-                longMessageThreshold: 300, // Characters
-            };
+            // // Emit 'messageCount' event to all connected clients with updated count
+            // io.emit('messageCount', messagesSent);
 
-            // Merge default and custom settings (if available)
-            const typingDelay = defaultTypingDelay;
-            const messageLength = messageContent.length;
+            // const messageType = Object.keys(msg)[0];
+            // const messageContent = msg[messageType]?.text || msg[messageType]?.caption || '';
 
-            // Handle audio messages
-            if (messageType === 'audioMessage') {
-                await sock.sendPresenceUpdate('recording', recipientJids[0]);
-                const audioDuration = msg.audioMessage.seconds || 5; // Estimate duration if not provided
-                await delay(audioDuration * 1000); // Wait for the audio duration
-                await sock.sendPresenceUpdate('paused', recipientJids[0]);
-                return msg;
-            } else if (messageType === 'videoMessage' || messageType === 'imageMessage' || messageType === 'documentMessage' || messageType === 'documentWithCaptionMessage' || messageType === 'protocolMessage' || messageType === 'reactionMessage') {
-                return msg;
-            }
 
-            // Handle text or caption messages
-            const typingDuration = messageLength > typingDelay.longMessageThreshold
-                ? typingDelay.max
-                : (Math.random() * (typingDelay.max - typingDelay.min) + typingDelay.min);
+            // // Default typing delay settings
+            // const defaultTypingDelay = {
+            //     min: 400, // Minimum delay in milliseconds
+            //     max: 800, // Maximum delay in milliseconds
+            //     longMessageThreshold: 300, // Characters
+            // };
 
-            await sock.sendPresenceUpdate('composing', recipientJids[0]);
-            await delay(typingDuration);
-            await sock.sendPresenceUpdate('paused', recipientJids[0]);
+            // // Merge default and custom settings (if available)
+            // const typingDelay = defaultTypingDelay;
+            // const messageLength = messageContent.length;
+
+            // // Handle audio messages
+            // if (messageType === 'audioMessage') {
+            //     await sock.sendPresenceUpdate('recording', recipientJids[0]);
+            //     const audioDuration = msg.audioMessage.seconds || 5; // Estimate duration if not provided
+            //     await delay(audioDuration * 1000); // Wait for the audio duration
+            //     await sock.sendPresenceUpdate('paused', recipientJids[0]);
+            //     return msg;
+            // } else if (messageType === 'videoMessage' || messageType === 'imageMessage' || messageType === 'documentMessage' || messageType === 'documentWithCaptionMessage' || messageType === 'protocolMessage' || messageType === 'reactionMessage') {
+            //     return msg;
+            // }
+
+            // // Handle text or caption messages
+            // const typingDuration = messageLength > typingDelay.longMessageThreshold
+            //     ? typingDelay.max
+            //     : (Math.random() * (typingDelay.max - typingDelay.min) + typingDelay.min);
+
+            // await sock.sendPresenceUpdate('composing', recipientJids[0]);
+            // await delay(typingDuration);
+            // await sock.sendPresenceUpdate('paused', recipientJids[0]);
             return msg;
         }
     });
 
     // Don't Remove buddy
+    againstEvent(sock)
     buddyEvents(sock, chalk);
 
     sock.ev.on('creds.update', saveCreds);
@@ -127,6 +130,7 @@ async function buddyMd(io, app) {
         if (connection === "open") {
             try {
                 console.log(chalk.cyan('Connected! 🔒✅'));
+                await sock.sendPresenceUpdate('available');
                 buddyMsg(sock);
                 return new Promise((resolve, reject) => {
                     setTimeout(async () => {

@@ -23,13 +23,25 @@ async function buddyCmdUpsert(sock, m) {
 
     const response = (text || conversation || caption).toLowerCase(); // Handle cases where all might be undefined
     const prefix = settings.PREFIX.find(p => response.startsWith(p));
+
+    // Check if the bot is in private mode and the message is from a group
+    if (settings.WORK_MODE.toLowerCase() === "private" && m.key.remoteJid.endsWith('@g.us')) {
+        console.log("Ignoring command in group due to private mode.");
+        return;
+    }
+
+    // Check if the bot is in readmessae true mode 
+    if (settings.READ_ALL_MESSAGES) {
+        await sock.readMessages([m.key]);
+    }
+
     if (response.startsWith(prefix)) {
         const commandName = response.slice(prefix.length).trim().split(' ')[0]; // Extract command name
         const command = Object.values(commands).find(cmd => {
             const usages = Array.isArray(cmd.usage) ? cmd.usage.map(u => u.toLowerCase()) : [cmd.usage.toLowerCase()];
             return usages.includes(commandName.toLowerCase());
-        });        
-        
+        });
+
         if (command) {
             try {
                 const sender = m.key.remoteJid.endsWith('@g.us') ? m.key.participant : m.key.remoteJid;
@@ -56,7 +68,7 @@ async function buddyCmdUpsert(sock, m) {
             }
         } else {
             // Optional: Handle unknown commands (e.g., send a help message)
-            await buddy.reply(m, 'Unknown command. Type !help for available commands.');
+            //     await buddy.reply(m, 'Unknown command. Type !help for available commands.');
         }
     }
 }

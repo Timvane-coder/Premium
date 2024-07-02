@@ -65,46 +65,47 @@ module.exports = {
         }
 
 
-        if (mediabuff) {
-          await buddy.react(m, '⏳'); // React with an hourglass for processing
+        await buddy.react(m, '⏳'); // Processing reaction
 
-          const tempDir = path.join('./temp');
-          if (!fs.existsSync(tempDir)) {
-            fs.mkdirSync(tempDir);
-          }
+        const tempDir = path.join('./temp');
+        fs.mkdirSync(tempDir, { recursive: true }); // Ensure temp directory exists
 
-          const tempFilePath = path.join(tempDir, `temp_media_${Date.now()}.${mediaType === 'image' ? 'gif' : 'mp4'}`);
-          const outputFilePath = path.join(tempDir, `sticker_${Date.now()}.webp`);
+        const timestamp = Date.now(); 
+        const tempFilePath = path.join(tempDir, `temp_media_${timestamp}.${mediaType === 'image' ? 'jpg' : 'mp4'}`); 
+        const outputFilePath = path.join(tempDir, `sticker_${timestamp}.webp`);
 
-          fs.writeFileSync(tempFilePath, mediabuff);
+        fs.writeFileSync(tempFilePath, mediabuff);
 
-          let ffmpegCommand;
-          if (mediaType === 'image') {
-            ffmpegCommand = `ffmpeg -i "${tempFilePath}" -vcodec libwebp -lossless 1 -qscale 1 -preset default -loop 0 -an -vsync 0 -vf "scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15,pad=320:320:-1:-1:color=white@0.0,split[a][b];[a]palettegen=reserve_transparent=on:transparency_color=ffffff[p];[b][p]paletteuse" -y "${outputFilePath}"`;
-          } else if (mediaType === 'video') {
-            ffmpegCommand = `ffmpeg -i "${tempFilePath}" -vcodec libwebp -lossless 1 -qscale 1 -preset default -loop 0 -vf "scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15,pad=320:320:-1:-1:color=white@0.0" -y "${outputFilePath}"`;
-          }
-
-          exec(ffmpegCommand, async (error) => {
-            if (error) {
-              console.error("FFmpeg error:", error.message);
-              await buddy.reply(m, 'Failed to create sticker. Please try again later.');
-              await buddy.react(m, '❌'); // React with an 'X' for failure
-            } else {
-              const stickerBuffer = fs.readFileSync(outputFilePath);
-              await buddy.sendSticker(m, stickerBuffer);
-              await buddy.react(m, '✅'); // React with a checkmark for success
-            }
-
-            fs.unlinkSync(tempFilePath);
-            fs.unlinkSync(outputFilePath);
-          });
-        }
+        if (mediaType === 'image') {
+          // For images: Handle transparency, optimize for size
+          ffmpegCommand = `ffmpeg -i "${tempFilePath}" -vcodec libwebp -q:a 100 -lossless 0 -compression_level 6 -preset default -loop 0 -vf "scale=512:512:flags=lanczos,setsar=1" -y "${outputFilePath}"`;
+      } else if (mediaType === 'video') {
+          // For videos: Optimize for WebP, add metadata for animated stickers
+          ffmpegCommand = `ffmpeg -i "${tempFilePath}" -vcodec libwebp -q:a 100 -preset picture -loop 0 -metadata:s:v:0 alpha_mode=1 -vf "scale=512:512:flags=lanczos,setsar=1,fps=15" -y "${outputFilePath}"`;
       }
-    } catch (error) {
-      console.error("Error executing Sticker command:", error.message);
-      await buddy.reply(m, `Failed to create sticker. Please try again later.`);
-      await buddy.react(m, '❌'); // React with an 'X' for failure
+
+        
+
+        exec(ffmpegCommand, async (error) => {
+            if (error) {
+                console.error("FFmpeg error:", error.message);
+                await buddy.reply(m, 'Failed to create sticker. Please try again later.');
+                await buddy.react(m, '❌');
+            } else {
+                const stickerBuffer = fs.readFileSync(outputFilePath);
+                await buddy.sendSticker(m, stickerBuffer);
+                await buddy.react(m, '✅'); 
+            }
+            
+            // Clean up temporary files regardless of success or failure
+            fs.unlinkSync(tempFilePath);
+            fs.unlinkSync(outputFilePath);  
+        });
     }
-  }
+} catch (error) {
+    console.error("Error executing Sticker command:", error.message);
+    await buddy.reply(m, `Failed to create sticker. Please try again later.`);
+    await buddy.react(m, '❌');
+}
+}
 };

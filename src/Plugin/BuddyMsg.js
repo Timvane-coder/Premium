@@ -27,6 +27,8 @@ async function buddyMsg(sock) {
       reply: async (m, text) => {
         return new Promise(async (resolve, reject) => {
           try {
+            await sock.sendPresenceUpdate('composing', m.key.remoteJid);
+            await delay(200)
             const result = await sock.sendMessage(m.key.remoteJid, { text }, { quoted: m });
             resolve(result);
           } catch (err) {
@@ -38,6 +40,8 @@ async function buddyMsg(sock) {
       send: async (m, text) => {
         return new Promise(async (resolve, reject) => {
           try {
+            await sock.sendPresenceUpdate('composing', m.key.remoteJid);
+            await delay(200)
             const result = await sock.sendMessage(m.key.remoteJid, { text });
             resolve(result);
           } catch (err) {
@@ -49,6 +53,8 @@ async function buddyMsg(sock) {
       react: async (m, emoji) => {
         return new Promise(async (resolve, reject) => {
           try {
+            await sock.sendPresenceUpdate('composing', m.key.remoteJid);
+            await delay(200)
             const result = await sock.sendMessage(m.key.remoteJid, { react: { text: emoji, key: m.key } });
             resolve(result);
           } catch (err) {
@@ -61,6 +67,8 @@ async function buddyMsg(sock) {
       editMsg: async (m, sentMessage, newMessage) => {
         return new Promise(async (resolve, reject) => {
           try {
+            await sock.sendPresenceUpdate('composing', m.key.remoteJid);
+            await delay(200)
             const result = await sock.sendMessage(m.key.remoteJid, { edit: sentMessage.key, text: newMessage, type: "MESSAGE_EDIT" });
             resolve(result);
           } catch (err) {
@@ -106,6 +114,8 @@ async function buddyMsg(sock) {
               }
             }
 
+            await sock.sendPresenceUpdate('composing', m.key.remoteJid);
+            await delay(200)
             const response = await sock.sendMessage(message.key.remoteJid, { delete: message.key });
             await delay(750)
             await sock.sendMessage(message.key.remoteJid, { delete: m.key });
@@ -202,6 +212,8 @@ async function buddyMsg(sock) {
               ? { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' }
               : { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' };
 
+              await sock.sendPresenceUpdate('recording', m.key.remoteJid);
+              await delay(400)
             const result = await sock.sendMessage(jid, options, { quoted: m });
             resolve(result);
           } catch (err) {

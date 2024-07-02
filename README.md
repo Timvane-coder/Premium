@@ -1,8 +1,8 @@
 # 🚀 BUDDY-MD: Elevate Your WhatsApp Experience
 
-<p align="center">
-  <img src="https://your-image-url-here.com/buddy-md-logo.png" alt="BUDDY-MD Logo" width="250"/>
-</p>
+<div align="center">
+
+<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Ribeye&size=50&pause=1000&color=8d016f&center=true&width=910&height=100&lines=Buddy-MD;Multi+Divice+Whatsapp+Bot;Free+Palestine" alt="Typing SVG" /></a>
 
 <p align="center">
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Powered%20by-Node.js%2021+-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="Powered by Node.js"/></a>
@@ -15,6 +15,7 @@
 <p align="center">
   <strong>Transform your WhatsApp into a powerhouse of automation and efficiency.</strong>
 </p>
+</div>
 
 ## ✨ Discover BUDDY-MD
 
@@ -116,3 +117,4 @@ BUDDY-MD is open-source under the MIT License. See [LICENSE](LICENSE) for detail
 <p align="center">
   <strong>Engineered with precision and passion by <a href="https://github.com/hacxk">HACXK</a></strong>
 </p>
+

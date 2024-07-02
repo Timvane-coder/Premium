@@ -16,7 +16,7 @@ const emojis = {
 };
 
 module.exports = {
-    usage: ["audio"],
+    usage: ["audio", "song", "play"],
     desc: "Search for YouTube videos and download their audio.",
     commandType: "Download",
     isGroupOnly: false,
@@ -128,7 +128,7 @@ module.exports = {
                                 sendFunction = buddy.sendDocument;
                             }
 
-                            await sendFunction(m, fs.readFileSync(tempPath), '', `${video.title}.mp3`);
+                            await sendFunction(m, fs.readFileSync(tempPath), 'audio/mpeg', `${video.title}.mp3`);
                             fs.unlinkSync(tempPath);
                             await buddy.react(m, emojis.done);
                         });

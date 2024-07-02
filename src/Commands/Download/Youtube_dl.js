@@ -157,7 +157,7 @@ module.exports = {
                                 sendFunction = buddy.sendDocument;
                             }
 
-                            await sendFunction(m, fs.readFileSync(tempPath), '', `${video.title}.${fileFormat}`);
+                            await sendFunction(m, fs.readFileSync(tempPath), mediaType === 'audio' ? 'audio/mpeg' : 'video/mp4', `${video.title}.${fileFormat}`);
                             fs.unlinkSync(tempPath);
                             await buddy.react(m, emojis.done);
                         });

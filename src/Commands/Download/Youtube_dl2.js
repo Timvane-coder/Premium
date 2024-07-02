@@ -129,7 +129,7 @@ module.exports = {
                                 sendFunction = buddy.sendDocument;
                             }
 
-                            await sendFunction(m, fs.readFileSync(tempPath), '', `${video.title}.mp4`);
+                            await sendFunction(m, fs.readFileSync(tempPath), 'video/mp4', `${video.title}.mp4`);
                             fs.unlinkSync(tempPath);
                             await buddy.react(m, emojis.done);
                         });

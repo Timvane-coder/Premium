@@ -5,13 +5,11 @@ const path = require('path');
 const { buddyStatistic } = require('./src/Plugin/BuddyStatistic');
 const { checkFFmpeg } = require('./src/Plugin/BuddyModule');
 const socketIo = require('socket.io'); // Require Socket.IO
-const httpProxy = require('http-proxy'); // Require http-proxy for port forwarding
 
 const app = express();
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io = socketIo(server); // Initialize Socket.IO with the HTTP server
-const proxy = httpProxy.createProxyServer({});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,12 +29,6 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
-});
-
-// Proxy server for port forwarding
-const targetPort = 8080; // Target port where your main server is running
-server.on('upgrade', (req, socket, head) => {
-    proxy.ws(req, socket, head, { target: `ws://localhost:${targetPort}` });
 });
 
 // Improved Error Handling with More Detail
@@ -62,11 +54,10 @@ app.use((err, req, res, next) => {
             }
         });
         server.listen(port, async () => {
-            console.log(`Proxy server is listening on port ${port}`);
-            console.log(`Forwarding requests to port ${targetPort}`);
+            console.log(`Server is listening on port ${port}`);
             await buddyMd(io, app);
         });
     } catch (err) {
-        console.error('Error starting server or news function:', err);
+        console.error('Error starting server or running functions:', err);
     }
 })();

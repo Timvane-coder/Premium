@@ -4,6 +4,8 @@ global.settings = {
     BOT_NAME: "BUDDY-MD",
     VERSION: 'V1.0.0',
     // Additional Settings (Feel free to add more as needed)
+    WORK_MODE: "Public",
+    READ_ALL_MESSAGES: false,
     PREFIX: ["!", "/", "."], // Command prefix
     WELCOME_MESSAGE: "Hello! I'm BUDDY-MD, your friendly WhatsApp bot.",
     DEFAULT_TRANSLATION_LANG: "en",
@@ -13,5 +15,11 @@ global.settings = {
         // ... other API keys
     },
     SAFE_SEARCH: false,
+    REJECT_CALLS: true,
+    SEND_WELCOME_MESSAGE: true, 
+    WELCOME_MESSAGE: "👋 Welcome to the group! We're glad to have you here. 😊",
+    DELETE_WA_LINKS: true,
+    BAD_WORD_FILTER: true,
+    BAD_WORDS: ['badword1', 'badword2'] // add more if you want
     // ... more settings
 };
