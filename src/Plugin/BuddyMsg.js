@@ -140,100 +140,114 @@ async function buddyMsg(sock) {
       },
 
       sendImage: async (m, bufferOrUrl, captions, asSticker = false) => {
-        try {
-          const jid = m.key.remoteJid;
-          let options = {};
+        return new Promise(async (resolve, reject) => {
+          try {
+            const jid = m.key.remoteJid;
+            let options = {};
 
-          if (typeof bufferOrUrl === 'string') {
-            options = {
-              image: { url: bufferOrUrl },
-              caption: captions || ''
-            };
-          } else if (Buffer.isBuffer(bufferOrUrl)) {
-            options = {
-              image: bufferOrUrl,
-              caption: captions || ''
-            };
-          } else {
-            throw new Error('Invalid bufferOrUrl type. Expected string (URL) or Buffer.');
+            if (typeof bufferOrUrl === 'string') {
+              options = {
+                image: { url: bufferOrUrl },
+                caption: captions || ''
+              };
+            } else if (Buffer.isBuffer(bufferOrUrl)) {
+              options = {
+                image: bufferOrUrl,
+                caption: captions || ''
+              };
+            } else {
+              throw new Error('Invalid bufferOrUrl type. Expected string (URL) or Buffer.');
+            }
+
+            const result = await sock.sendMessage(jid, options);
+            await delay(200);
+            resolve(result);
+          } catch (err) {
+            console.error(`${RED}Error in buddy.sendImage: ${err.message}${RESET}`);
+            reject(err);
           }
-
-
-          const result = await sock.sendMessage(jid, options);
-          await delay(200)
-          return result
-        } catch (err) {
-          console.error(`${RED}Error in buddy.sendImage: ${err.message}${RESET}`);
-          return
-        }
+        });
       },
 
       sendVideo: async (m, bufferOrUrl, caption) => {
-        try {
-          const jid = m.key.remoteJid;
-          const options = (typeof bufferOrUrl === 'string'
-            ? { video: bufferOrUrl, caption }
-            : { video: { url: bufferOrUrl }, caption });
+        return new Promise(async (resolve, reject) => {
+          try {
+            const jid = m.key.remoteJid;
+            const options = (typeof bufferOrUrl === 'string'
+              ? { video: bufferOrUrl, caption }
+              : { video: { url: bufferOrUrl }, caption });
 
-          const result = await sock.sendMessage(jid, options);
-          return result
-        } catch (err) {
-          console.error(`${RED}Error in buddy.sendVideo: ${err.message}${RESET}`);
-          return
-        }
+            const result = await sock.sendMessage(jid, options);
+            resolve(result)
+            return result
+          } catch (err) {
+            console.error(`${RED}Error in buddy.sendVideo: ${err.message}${RESET}`);
+            return
+          }
+        });
       },
 
       sendDocument: async (m, bufferOrUrl, mimetype, fileName, caption) => {
-        try {
-          const jid = m.key.remoteJid;
-          const options = typeof bufferOrUrl === 'string'
-            ? { document: { url: bufferOrUrl }, mimetype, fileName, caption }
-            : { document: bufferOrUrl, mimetype, fileName, caption };
+        return new Promise(async (resolve, reject) => {
+          try {
+            const jid = m.key.remoteJid;
+            const options = typeof bufferOrUrl === 'string'
+              ? { document: { url: bufferOrUrl }, mimetype, fileName, caption }
+              : { document: bufferOrUrl, mimetype, fileName, caption };
 
-          const result = await sock.sendMessage(jid, options);
-          return result
-        } catch (err) {
-          console.error(`${RED}Error in buddy.sendDocument: ${err.message}${RESET}`);
-          return
-        }
+            const result = await sock.sendMessage(jid, options);
+            await delay(200)
+            resolve(result)
+            return result
+          } catch (err) {
+            console.error(`${RED}Error in buddy.sendDocument: ${err.message}${RESET}`);
+            return
+          }
+        });
       },
 
       sendAudio: async (m, bufferOrUrl, ptt = false) => {
-        try {
-          const jid = m.key.remoteJid;
-          const options = typeof bufferOrUrl === 'string'
-            ? { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' }
-            : { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' };
+        return new Promise(async (resolve, reject) => {
+          try {
+            const jid = m.key.remoteJid;
+            const options = typeof bufferOrUrl === 'string'
+              ? { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' }
+              : { audio: bufferOrUrl, ptt, mimetype: 'audio/mpeg' };
 
-          await sock.sendPresenceUpdate('recording', m.key.remoteJid);
-          await delay(400)
-          const result = await sock.sendMessage(jid, options, { quoted: m });
-          return result
-        } catch (err) {
-          console.error(`${RED}Error in buddy.sendAudio: ${err.message}${RESET}`);
-          return
-        }
+            await sock.sendPresenceUpdate('recording', m.key.remoteJid);
+            await delay(400)
+            const result = await sock.sendMessage(jid, options, { quoted: m });
+            await delay(200);
+            resolve(result);
+            return result
+          } catch (err) {
+            console.error(`${RED}Error in buddy.sendAudio: ${err.message}${RESET}`);
+            return
+          }
+        });
       },
       sendGif: async (m, bufferOrUrl, playback = true) => { // Default playback to true
-        try {
-          const jid = m.key.remoteJid;
+        return new Promise(async (resolve, reject) => {
+          try {
+            const jid = m.key.remoteJid;
 
-          // If bufferOrUrl is a string (URL), fetch the GIF data
-          let gifBuffer;
-          if (typeof bufferOrUrl === 'string') {
-            const response = await fetch(bufferOrUrl); // You'll need to import fetch if you're not already using it
-            gifBuffer = await response.arrayBuffer();
-          } else {
-            gifBuffer = bufferOrUrl; // Assume bufferOrUrl is already a Buffer
+            // If bufferOrUrl is a string (URL), fetch the GIF data
+            let gifBuffer;
+            if (typeof bufferOrUrl === 'string') {
+              const response = await fetch(bufferOrUrl); // You'll need to import fetch if you're not already using it
+              gifBuffer = await response.arrayBuffer();
+            } else {
+              gifBuffer = bufferOrUrl; // Assume bufferOrUrl is already a Buffer
+            }
+
+            const result = await sock.sendMessage(m.key.remoteJid, { video: gifBuffer, gifPlayback: playback });
+            return result
+
+          } catch (err) {
+            console.error(`${RED}Error in buddy.sendGif: ${err.message}${RESET}`);
+            return
           }
-
-          const result = await sock.sendMessage(m.key.remoteJid, { video: gifBuffer, gifPlayback: playback });
-          return result
-
-        } catch (err) {
-          console.error(`${RED}Error in buddy.sendGif: ${err.message}${RESET}`);
-          return
-        }
+        });
       },
       externalAdReply: async (m, head, title, body, mediaType, thumbnailPath) => {
         return new Promise(async (resolve, reject) => {
@@ -661,29 +675,15 @@ async function buddyMsg(sock) {
       },
 
       saveFileToTemp: async (bufferData, filename) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
           try {
             const tempDir = path.join(__dirname, 'temp');
-
-            // Check if the directory exists, create it if not
-            fs.access(tempDir, fs.constants.F_OK, (err) => {
-              if (err) {
-                // Directory doesn't exist, create it
-                fs.mkdir(tempDir, { recursive: true }, (err) => {
-                  if (err) {
-                    reject(err);
-                    return;
-                  }
-                  // Proceed with writing the file after creating the directory
-                  writeTempFile(tempDir, bufferData, filename, resolve, reject);
-                });
-              } else {
-                // Directory exists, proceed with writing the file
-                writeTempFile(tempDir, bufferData, filename, resolve, reject);
-              }
-            });
+            await fs.mkdir(tempDir, { recursive: true }); // Ensure directory exists
+            const tempPath = path.join(tempDir, filename);
+            await fs.writeFile(tempPath, bufferData);
+            return tempPath;
           } catch (error) {
-            reject(error);
+            throw error;
           }
         });
       },

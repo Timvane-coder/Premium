@@ -80,7 +80,7 @@ const downloadFBVideo = async (sock, m, args, videoUrl, format = 'sd') => {
 
         const tempDir = path.join('./temp');
         if (!fs.existsSync(tempDir)) {
-            fs.mkdirSync(tempDir);
+            await fs.mkdirSync(tempDir);
         }
         const tempPath = path.join(tempDir, `fb_${Date.now()}.mp4`);
       

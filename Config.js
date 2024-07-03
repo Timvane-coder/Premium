@@ -14,7 +14,7 @@ global.settings = {
         OPENWEATHERMAP_API_KEY: '', // Your OpenWeatherMap API key (if needed)
         // ... other API keys
     },
-    SAFE_SEARCH: false,
+    SAFE_SEARCH: true,
     REJECT_CALLS: true,
     SEND_WELCOME_MESSAGE: true, 
     WELCOME_MESSAGE: "👋 Welcome to the group! We're glad to have you here. 😊",

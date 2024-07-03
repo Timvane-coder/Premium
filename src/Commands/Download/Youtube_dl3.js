@@ -16,7 +16,7 @@ const emojis = {
 };
 
 module.exports = {
-    usage: ["audio", "song", "play"],
+    usage: ["audio", "song", "play", "mp3"],
     desc: "Search for YouTube videos and download their audio.",
     commandType: "Download",
     isGroupOnly: false,
