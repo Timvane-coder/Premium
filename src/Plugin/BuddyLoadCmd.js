@@ -1,90 +1,160 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
-require('../../Config'); // Load initial config
+const chokidar = require('chokidar');
+const debounce = require('lodash.debounce');
 
-let commands = {};
-let debounceTimeouts = {};
-const debounceTime = 1000;
-const configPath = path.resolve(__dirname, '../../Config.js');
+// ANSI color codes
+const colors = {
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  reset: '\x1b[0m'
+};
 
-function loadCommands(commandDir) {
-  const commandWatcher = fs.watch(commandDir, { recursive: true }, (event, filename) => {
-    if (filename) {
-      const filePath = path.join(commandDir, filename);
-      if (filename.endsWith('.js')) {
-        handleFileChange(event, filePath);
-      } else {
-        console.log(`\x1b[36m[INFO] Ignored file change for non-JavaScript file: ${filePath}\x1b[0m`);
+require('../../Config');
+
+class CommandLoader {
+  constructor() {
+    this.commands = new Map();
+    this.aliases = new Map();
+    this.watchers = new Set();
+    this.configPath = path.resolve(__dirname, '../../Config.js');
+    this.debounceTime = 1000;
+  }
+
+  async loadCommands(commandDir) {
+    await this.loadAllCommands(commandDir);
+    this.watchCommands(commandDir);
+    this.watchConfig();
+
+    process.on('SIGINT', () => this.cleanup());
+  }
+
+  async loadAllCommands(dir) {
+    const files = await fs.readdir(dir);
+    for (const file of files) {
+      const filePath = path.join(dir, file);
+      const stat = await fs.stat(filePath);
+      if (stat.isDirectory()) {
+        await this.loadAllCommands(filePath);
+      } else if (file.endsWith('.js')) {
+        await this.loadCommand(filePath);
       }
     }
-  });
+  }
 
-  fs.watchFile(configPath, (curr, prev) => handleConfigChange(curr, prev, configPath));
+  async loadCommand(filePath) {
+    try {
+      delete require.cache[require.resolve(filePath)];
+      const command = require(filePath);
+      if (command.usage) {
+        const usages = Array.isArray(command.usage) ? command.usage : [command.usage];
+        usages.forEach(usage => this.commands.set(usage.toLowerCase(), command));
+        console.log(`${colors.green}Loaded command: ${command.usage}${colors.reset}`);
 
-  process.on('SIGINT', () => {
-    commandWatcher.close();
-    fs.unwatchFile(configPath);
-    console.log('Watchers closed.');
+        if (command.aliases) {
+          command.aliases.forEach(alias => {
+            this.aliases.set(alias, command.usage);
+          });
+        }
+      } else {
+        console.log(`${colors.yellow}Skipped: ${filePath} does not export 'usage'.${colors.reset}`);
+      }
+    } catch (error) {
+      console.error(`${colors.red}Error loading command from ${filePath}:${colors.reset}`, error);
+    }
+  }
+
+  watchCommands(commandDir) {
+    const watcher = chokidar.watch(commandDir, {
+      ignored: /(^|[\/\\])\../, // Ignore dot files
+      persistent: true,
+      ignoreInitial: true,
+      awaitWriteFinish: {
+        stabilityThreshold: 2000,
+        pollInterval: 100
+      }
+    });
+
+    watcher
+      .on('add', path => this.handleFileChange('add', path))
+      .on('change', path => this.handleFileChange('change', path))
+      .on('unlink', path => this.handleFileChange('unlink', path));
+
+    this.watchers.add(watcher);
+  }
+
+  watchConfig() {
+    const watcher = chokidar.watch(this.configPath, {
+      persistent: true,
+      ignoreInitial: true,
+      awaitWriteFinish: {
+        stabilityThreshold: 2000,
+        pollInterval: 100
+      }
+    });
+
+    watcher.on('change', () => this.handleConfigChange());
+
+    this.watchers.add(watcher);
+  }
+
+  handleFileChange = debounce(async (event, filePath) => {
+    if (filePath.endsWith('.js')) {
+      console.log(`${colors.yellow}[HOT RELOAD] Detected ${event} in ${filePath}${colors.reset}`);
+      if (event === 'unlink') {
+        this.removeCommand(filePath);
+      } else {
+        await this.loadCommand(filePath);
+      }
+    }
+  }, this.debounceTime);
+
+  handleConfigChange = debounce(() => {
+    console.log(`${colors.yellow}[HOT RELOAD] Detected change in ${this.configPath}${colors.reset}`);
+    this.reloadConfig();
+  }, this.debounceTime);
+
+  removeCommand(filePath) {
+    const commandToRemove = Array.from(this.commands.entries())
+      .find(([_, cmd]) => cmd.__filename === filePath);
+
+    if (commandToRemove) {
+      const [usage, command] = commandToRemove;
+      this.commands.delete(usage);
+      if (command.aliases) {
+        command.aliases.forEach(alias => this.aliases.delete(alias));
+      }
+      console.log(`${colors.red}Removed command: ${usage}${colors.reset}`);
+    }
+  }
+
+  reloadConfig() {
+    try {
+      delete require.cache[require.resolve(this.configPath)];
+      require(this.configPath);
+      console.log(`${colors.green}Reloaded config: ${this.configPath}${colors.reset}`);
+    } catch (error) {
+      console.error(`${colors.red}Error reloading config from ${this.configPath}:${colors.reset}`, error);
+    }
+  }
+
+  cleanup() {
+    this.watchers.forEach(watcher => watcher.close());
+    console.log(`${colors.blue}Watchers closed.${colors.reset}`);
     process.exit();
-  });
-
-  function handleFileChange(event, filePath) {
-    clearTimeout(debounceTimeouts[filePath]);
-    debounceTimeouts[filePath] = setTimeout(() => reloadCommand(filePath), debounceTime);
   }
 
-  function handleConfigChange(curr, prev, configPath) {
-    if (curr.mtime !== prev.mtime) {
-      clearTimeout(debounceTimeouts[configPath]);
-      debounceTimeouts[configPath] = setTimeout(() => reloadConfig(configPath), debounceTime);
-    }
-  }
-
-  loadAllCommands(commandDir);
-}
-
-function loadAllCommands(commandDir) {
-  const files = fs.readdirSync(commandDir);
-
-  for (const file of files) {
-    const filePath = path.join(commandDir, file);
-    const fileStat = fs.statSync(filePath);
-
-    if (fileStat.isDirectory()) {
-      loadAllCommands(filePath);
-    } else if (file.endsWith('.js')) {
-      reloadCommand(filePath);
-    } else {
-      console.log(`\x1b[36m[INFO] Ignored non-JavaScript file during initial load: ${filePath}\x1b[0m`);
-    }
+  getCommand(name) {
+    return this.commands.get(name.toLowerCase());
   }
 }
 
-function reloadCommand(filePath) {
-  console.log(`\x1b[33m[HOT RELOAD] Detected change in ${filePath}\x1b[0m`);
-  try {
-    delete require.cache[require.resolve(filePath)];
-    const command = require(filePath);
-    if (command.usage) {
-      commands[command.usage] = command;
-      console.log(`\x1b[32mReloaded command: ${command.usage}\x1b[0m`);
-    } else {
-      console.log(`\x1b[31mSkipped: ${filePath} does not export 'usage'.\x1b[0m`);
-    }
-  } catch (error) {
-    console.error(`\x1b[31mError loading command from ${filePath}:\x1b[0m`, error);
-  }
-}
+const loader = new CommandLoader();
 
-function reloadConfig(configPath) {
-  console.log(`\x1b[33m[HOT RELOAD] Detected change in ${configPath}\x1b[0m`);
-  try {
-    delete require.cache[require.resolve(configPath)];
-    require(configPath);
-    console.log(`\x1b[32mReloaded config: ${configPath}\x1b[0m`);
-  } catch (error) {
-    console.error(`\x1b[31mError reloading config from ${configPath}:\x1b[0m`, error);
-  }
-}
-
-module.exports = { commands, loadCommands };
+module.exports = {
+  loadCommands: (dir) => loader.loadCommands(dir),
+  getCommand: (name) => loader.getCommand(name),
+  getAllCommands: () => Array.from(loader.commands.values())
+};

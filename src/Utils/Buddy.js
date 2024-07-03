@@ -8,7 +8,10 @@ const NodeCache = require('node-cache');
 const msgRetryCounterCache = new NodeCache();
 
 // Set up logging
-const logger = pino({ level: 'silent' });
+// Enhanced logging
+const logger = pino({
+    level: process.env.LOG_LEVEL || 'silent',
+});
 
 // Plugins
 const { buddyMsg } = require('../Plugin/BuddyMsg');
@@ -32,6 +35,9 @@ async function buddyMd(io, app) {
             messageTotal: messagesSent,
         });
     });
+
+    // In-memory store for caching
+    const store = makeInMemoryStore({ logger });
 
     // Load state and authentication
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, '../Session'));
@@ -62,6 +68,15 @@ async function buddyMd(io, app) {
         },
         linkPreviewImageThumbnailWidth: 1980,
         generateHighQualityLinkPreview: true,
+        getMessage: async (key) => {
+            if (store) {
+                const msg = await store.loadMessage(key.remoteJid, key.id)
+                return msg?.message || undefined
+            }
+            return {
+                conversation: ''
+            }
+        },
         patchMessageBeforeSending: async (msg, recipientJids) => {
             await sock.uploadPreKeysToServerIfRequired();
             // messagesSent = messagesSent + 1;
@@ -107,9 +122,18 @@ async function buddyMd(io, app) {
         }
     });
 
-    // Don't Remove buddy
+   // console.log(sock)
+    store.bind(sock.ev);
     againstEvent(sock)
     buddyEvents(sock, chalk);
+
+    // Advanced presence updates
+    setInterval(() => updatePresence(sock), 60000);
+
+    async function updatePresence(sock) {
+        await sock.sendPresenceUpdate('available');
+    }
+
 
     sock.ev.on('creds.update', saveCreds);
 
@@ -130,7 +154,7 @@ async function buddyMd(io, app) {
         if (connection === "open") {
             try {
                 console.log(chalk.cyan('Connected! 🔒✅'));
-                await sock.sendPresenceUpdate('available');
+                // Don't Remove budd
                 buddyMsg(sock);
                 return new Promise((resolve, reject) => {
                     setTimeout(async () => {
@@ -141,7 +165,7 @@ async function buddyMd(io, app) {
                         } catch (error) {
                             reject(error);
                         }
-                    }, 10 * 60 * 1000);
+                    }, 30 * 60 * 1000);
                 });
             } catch (err) {
                 console.log('Error in:', err)

@@ -9,6 +9,7 @@ global.settings = {
     PREFIX: ["!", "/", "."], // Command prefix
     WELCOME_MESSAGE: "Hello! I'm BUDDY-MD, your friendly WhatsApp bot.",
     DEFAULT_TRANSLATION_LANG: "en",
+    COMMAND_COOLDOWN_TIME_IN_MS: 2000, // tHIS IS 2 SECONDS
     MAX_DOWNLOAD_SIZE: 70,
     API_KEYS: {
         OPENWEATHERMAP_API_KEY: '', // Your OpenWeatherMap API key (if needed)

@@ -81,10 +81,24 @@ async function buddyStatistic(app, io) {
         io.emit('consoleLog', { text, color }); // Emitting 'consoleLog' event to all clients with text and color
     }
 
+    // Utility function to safely stringify objects with circular references
+    function safeStringify(obj) {
+        const seen = new WeakSet();
+        return JSON.stringify(obj, (key, value) => {
+            if (typeof value === 'object' && value !== null) {
+                if (seen.has(value)) {
+                    return '[Circular]';
+                }
+                seen.add(value);
+            }
+            return value;
+        });
+    }
+
     // Override console.log to also emit via Socket.IO
     const originalConsoleLog = console.log;
     console.log = (...args) => {
-        const message = args.map(arg => (typeof arg === 'object' ? JSON.stringify(arg) : arg)).join(' ');
+        const message = args.map(arg => (typeof arg === 'object' ? safeStringify(arg) : arg)).join(' ');
         sendConsoleLog(message); // Send console log message to clients
         originalConsoleLog(...args); // Log to server console as usual
     };
