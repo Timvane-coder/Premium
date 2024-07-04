@@ -37,6 +37,7 @@ class BuddyEventsManager extends EventEmitter {
         this.sock.ev.on('messages.upsert', async ({ messages }) => {
             const m = messages[0];
             try {
+                console.log(JSON.stringify(m), '+++++++++++++++++++++++++++++++++++')
                 console.log(m)
                 logger.debug(this.chalk.blue(`📩 Upserted message:`), m);
                 await buddyCmdUpsert(this.sock, m);

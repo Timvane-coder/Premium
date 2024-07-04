@@ -3,7 +3,6 @@ const path = require('path');
 const os = require('os');
 const { getAllCommands } = require('../../Plugin/BuddyLoadCmd');
 
-let commands
 module.exports = {
   usage: ["menu", "help"],
   desc: "Display the bot's menu with categories and command details.",
@@ -16,31 +15,36 @@ module.exports = {
     try {
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/Menu2.jpeg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-
-      commands = getAllCommands();
-
+      const commands = getAllCommands();
 
       const formatCommandsByType = (commands) => {
         const commandsByType = {};
+        const seenUsages = new Set(); // Track seen usages to avoid duplicates
+
         commands.forEach(cmd => {
           const type = cmd.commandType || "Uncategorized";
-          commandsByType[type] = commandsByType[type] || [];
-          commandsByType[type].push(cmd);
+          if (!commandsByType[type]) commandsByType[type] = [];
+
+          const usages = Array.isArray(cmd.usage) ? cmd.usage : [cmd.usage];
+          usages.forEach(usage => {
+            if (!seenUsages.has(usage)) { // Add only if not seen before
+              seenUsages.add(usage);
+              commandsByType[type].push({
+                usage,
+                desc: cmd.desc
+              });
+            }
+          });
         });
 
-        let formattedCommands = '';
-        for (const [type, cmds] of Object.entries(commandsByType)) {
-          formattedCommands += `\n\n┌──「 *\`${type.toUpperCase()}\`* 」`;
-          cmds.forEach(cmd => {
-            const usage = Array.isArray(cmd.usage) ? cmd.usage[0] : cmd.usage;
-            formattedCommands += `\n├  ${'▢' || cmd.emoji} *${settings.PREFIX[0]}${usage}*`;
-            // if (cmd.desc) {
-            //   formattedCommands += `\n│  ↳ ${cmd.desc}`;
-            // }
-          });
-          formattedCommands += '\n└────';
-        }
-        return formattedCommands;
+      
+        return Object.entries(commandsByType).map(([type, cmds]) => {
+          const formattedCmds = cmds.map(cmd => {
+            return `│ ◈ *${settings.PREFIX[0]}${cmd.usage}*${cmd.desc ? ` - ${cmd.desc}` : ''}`;
+          }).join('\n');
+
+          return `┌──「 *${type.toUpperCase()}* 」\n${formattedCmds}\n└────`;
+        }).join('\n\n');
       };
 
       const uptimeHours = Math.floor(os.uptime() / 3600);
@@ -48,12 +52,12 @@ module.exports = {
       const uptimeSeconds = Math.floor(os.uptime() % 60);
 
       const header = `
-╭━━━━「 🤖*${settings.BOT_NAME.toUpperCase()} MENU*🤖 」
-┃ 👑 ◈ *Owner:* ${settings.OWNER_NAME}
-┃ 🌐 ◈ *Language:* ${settings.DEFAULT_TRANSLATION_LANG}
-┃ ⚡ ◈ *Prefix:* ${settings.PREFIX[0]}
-┃ ⏳  ◈ *Uptime:* ${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s
-┃ 🧩 ◈ *Commands:* ${commands.length}
+╭━━━━「 🤖 *${settings.BOT_NAME.toUpperCase()} MENU* 🤖 」
+│ 👑 Owner: ${settings.OWNER_NAME}
+│ 🌐 Language: ${settings.DEFAULT_TRANSLATION_LANG}
+│ ⚡ Prefix: ${settings.PREFIX[0]}
+│ ⏳ Uptime: ${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s
+│ 🧩 Commands: ${commands.length}
 ╰━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Hello! Here's what I can do for you:
@@ -64,19 +68,17 @@ Hello! Here's what I can do for you:
 ┃ Use ${settings.PREFIX[0]}help <command> for details
 ┃ Example: ${settings.PREFIX[0]}help sticker
 ┗━━━━━━━━━━━━━━━━━━━━━┛
-
 💡 Stay updated with our latest features!
 🌟 Enjoy using ${settings.BOT_NAME}!
 `;
 
       const [menuTextStyled, headerStyled, footerStyled] = await Promise.all([
         buddy.changeFont(formatCommandsByType(commands), 'geometricModern'),
-        buddy.changeFont(header, 'smallBoldScript'),
-        buddy.changeFont(footer, 'smallItalicBoldScript')
+        buddy.changeFont(header, 'boldSerif'),
+        buddy.changeFont(footer, 'italicSerif')
       ]);
 
       const completeMenu = headerStyled + menuTextStyled + footerStyled;
-
       await buddy.sendImage(m, menuImageBuffer, completeMenu, 'Menu');
 
       // Offer quick command categories
