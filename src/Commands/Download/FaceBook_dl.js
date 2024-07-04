@@ -1,126 +1,181 @@
 const axios = require('axios');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
-const { Stream } = require('stream');
+const { createWriteStream } = require('fs');
+const { pipeline } = require('stream/promises');
 
-const emojis = { // Emoji mapping for responses
-    search: '🔍',
-    found: '🎉',
-    noResults: '😕',
-    error: '🤖',
-    downloadChoice: '👇',
-    option: '✅',
-    processing: '⏳',
-    done: '🚀',
-    warning: '⚠️'
+const emojis = {
+    search: '🔍', found: '🎉', noResults: '😕', error: '🤖', downloadChoice: '👇',
+    option: '✅', processing: '⏳', done: '🚀', warning: '⚠️', info: 'ℹ️'
 };
 
 const MAX_DOWNLOAD_SIZE = settings.MAX_DOWNLOAD_SIZE * 1024 * 1024;
-const downloadFBVideo = async (sock, m, args, videoUrl, format = 'sd') => {
-    try {
-        const apiResponse = await axios.get(`https://api.vihangayt.com/downloader/fb?url=${encodeURIComponent(videoUrl)}`);
-        const videoInfo = apiResponse.data.data;
+const TEMP_DIR = './temp';
+const RETRY_ATTEMPTS = 3;
+const RETRY_DELAY = 1000;
 
-        if (!videoInfo.sdLink && !videoInfo.hdLink) {
-            return await buddy.reply(m, `${emojis.error} No downloadable links found for this video.`);
+class FacebookDownloader {
+    constructor(sock, m, args) {
+        this.sock = sock;
+        this.m = m;
+        this.args = args;
+        this.videoInfo = null;
+    }
+
+    async execute() {
+        try {
+            const url = this.args[0];
+            if (!url) {
+                return await buddy.reply(this.m, `${emojis.search} Please provide a Facebook video URL.`);
+            }
+
+            await this.fetchVideoInfo(url);
+            if (!this.videoInfo) return;
+
+            const format = await this.promptQualitySelection();
+            if (!format) return;
+
+            await this.downloadAndSendVideo(url, format);
+        } catch (error) {
+            console.error("Error in Facebook downloader:", error);
+            await buddy.react(this.m, emojis.error);
+            await buddy.reply(this.m, `${emojis.error} An unexpected error occurred. Please try again later.`);
         }
+    }
 
-        // Check if video size exceeds limit
-        const downloadLink = format === 'hd' ? videoInfo.hdLink : videoInfo.sdLink;
-        const sizeResponse = await axios.head(downloadLink);
-        const fileSize = parseInt(sizeResponse.headers['content-length'], 10);
-        if (fileSize > MAX_DOWNLOAD_SIZE) {
-            return await buddy.reply(m, `${emojis.warning} File size exceeds the limit.`);
+    async fetchVideoInfo(url) {
+        for (let attempt = 0; attempt < RETRY_ATTEMPTS; attempt++) {
+            try {
+                const apiResponse = await axios.get(`https://api.vihangayt.com/downloader/fb?url=${encodeURIComponent(url)}`);
+                this.videoInfo = apiResponse.data.data;
+                if (!this.videoInfo.sdLink && !this.videoInfo.hdLink) {
+                    await buddy.reply(this.m, `${emojis.noResults} No downloadable links found for this video.`);
+                    return null;
+                }
+                return;
+            } catch (error) {
+                if (attempt === RETRY_ATTEMPTS - 1) {
+                    throw error;
+                }
+                await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+            }
+        }
+    }
+
+    async promptQualitySelection() {
+        const options = [`\`[1] Standard Definition (SD)\``];
+        if (this.videoInfo.hdLink) {
+            options.push(`\`[2] High Definition (HD)\``);
         }
 
         const downloadOptions = `
 📽️ *BUDDY-MD FACEBOOK-DOWNLOADER* 📽️
 
-┌───────────────────
-├  👤 *Author:* ${videoInfo.owner || "Unknown"}
-├  📝 *Description:* ${(videoInfo.description || "").slice(0, 100)}... 
-└───────────────────
+👤 *Author:* ${this.videoInfo.owner || "Unknown"}
+📝 *Description:* ${(this.videoInfo.description || "").slice(0, 100)}...
 
-🔗 Link: ${videoUrl}
+🔗 Link: ${this.args[0]}
 
-📥 Downloading in ${format.toUpperCase()} quality...`;
+🔢 Select the download quality:
+
+${options.join('\n')}`;
 
         const beautifulFont = await buddy.changeFont(downloadOptions, 'smallBoldScript');
-        const sentMessage = await buddy.send(m, beautifulFont); // Send initial message
+        const sentMessage = await buddy.sendImage(this.m, `https://www.facebook.com/images/fb_icon_325x325.png`, beautifulFont);
+        await buddy.react(this.m, emojis.downloadChoice);
 
-        // Download, Progress Tracking, and Rate Limiting
-        let downloadedBytes = 0;
-        let lastEditTime = 0; // Store the last time the message was edited
-        const response = await axios.get(downloadLink, { responseType: 'stream' });
-        response.data.on('data', async (chunk) => {
-            downloadedBytes += chunk.length;
-            const progressPercent = Math.round((downloadedBytes / fileSize) * 100);
+        const responseMessage = await buddy.getResponseText(this.m, sentMessage, 30000);
+        if (!responseMessage) {
+            await buddy.reply(this.m, `${emojis.warning} Timed out waiting for your choice.`);
+            return null;
+        }
+
+        await buddy.react(this.m, emojis.option);
+        return responseMessage.response === '2' && this.videoInfo.hdLink ? 'hd' : 'sd';
+    }
+
+    async downloadAndSendVideo(url, format) {
+        const downloadLink = format === 'hd' ? this.videoInfo.hdLink : this.videoInfo.sdLink;
+        const fileSize = await this.getFileSize(downloadLink);
+
+        if (fileSize > MAX_DOWNLOAD_SIZE) {
+            return await buddy.reply(this.m, `${emojis.warning} File size (${(fileSize / 1024 / 1024).toFixed(2)} MB) exceeds the limit of ${MAX_DOWNLOAD_SIZE / 1024 / 1024} MB.`);
+        }
+
+        const tempPath = path.join(TEMP_DIR, `fb_${Date.now()}.mp4`);
+        await fs.mkdir(TEMP_DIR, { recursive: true });
+
+        const sentMessage = await buddy.reply(this.m, `${emojis.processing} Downloading... 0%`);
+        await this.downloadWithProgress(downloadLink, tempPath, sentMessage);
+
+        try {
+            await buddy.editMsg(this.m, sentMessage, `${emojis.done} Download complete! Sending video...`);
+            const caption = `Facebook Video (${format.toUpperCase()})\n\n👤 Author: ${this.videoInfo.owner || "Unknown"}\n📝 Description: ${(this.videoInfo.description || "").slice(0, 100)}...`;
+            await buddy.sendVideo(this.m, await fs.readFile(tempPath), caption);
+        } finally {
+            await fs.unlink(tempPath).catch(console.error);
+        }
+    }
+
+    async getFileSize(url) {
+        const response = await axios.head(url);
+        return parseInt(response.headers['content-length'], 10);
+    }
+
+    async downloadWithProgress(url, tempPath, sentMessage) {
+        const writer = createWriteStream(tempPath);
+        const response = await axios({
+            method: 'get',
+            url: url,
+            responseType: 'stream'
+        });
+
+        const totalLength = response.headers['content-length'];
+        let downloadedLength = 0;
+        let lastUpdateTime = Date.now();
+
+        response.data.on('data', (chunk) => {
+            downloadedLength += chunk.length;
             const now = Date.now();
-
-            // Edit the message only every 3 seconds to avoid rate limiting
-            if (progressPercent % 10 === 0 && (now - lastEditTime) >= 3000) {
-                lastEditTime = now;
-                const filledBlocks = Math.round(progressPercent / 10);
-                const emptyBlocks = 10 - filledBlocks;
-                const progressEmoji = '🟩'.repeat(filledBlocks) + '🟥'.repeat(emptyBlocks);
-
-                try {
-                    await buddy.editMsg(m, sentMessage, `${emojis.processing} Downloading... ${progressPercent}% ${progressEmoji}`);
-                } catch (editError) {
-                    if (editError.data === 429) { // Specifically handle rate-limit error (HTTP 429)
-                        console.warn("Rate limit exceeded, delaying edit...");
-                        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
-                        // Optionally: Retry the editMsg here.
-                    } else {
-                        console.error("Error editing progress message:", editError);
-                    }
-                }
+            if (now - lastUpdateTime > 5000) { // Changed to 5000 ms (5 seconds)
+                this.updateProgressMessage(sentMessage, downloadedLength, totalLength);
+                lastUpdateTime = now;
             }
         });
 
-        const tempDir = path.join('./temp');
-        if (!fs.existsSync(tempDir)) {
-            await fs.mkdirSync(tempDir);
-        }
-        const tempPath = path.join(tempDir, `fb_${Date.now()}.mp4`);
-      
+        await pipeline(response.data, writer);
+    }
+
+    async updateProgressMessage(sentMessage, downloadedLength, totalLength) {
+        const progress = (downloadedLength / totalLength) * 100;
+        const progressBar = this.getProgressBar(progress);
+        let retryDelay = 1000; // Start with a 1 second delay
+        const maxRetries = 3;
+    
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
-                await buddy.editMsg(m, sentMessage, `${emojis.done} Download complete!`);
-
-
-                // Send the video stream
-                const msd = await buddy.sendVideo(m, fs.readFileSync(tempPath), `Facebook Video (${format.toUpperCase()})`);
-
-                // Ensure the stream is closed and file deleted after sending
-                if (msd) {
-                    fs.unlinkSync(tempPath); // Delete the temporary file
-                }
-
-            } catch (sendError) {
-                console.error("Error sending video:", sendError);
-                await buddy.react(m, emojis.error);
-                await buddy.reply(m, `${emojis.error} An error occurred while sending the video.`);
-
-                // Handle potential cleanup error
-                try {
-                    fs.unlinkSync(tempPath);
-                } catch (cleanupError) {
-                    console.error("Error cleaning up temp file:", cleanupError);
+                await buddy.editMsg(this.m, sentMessage, `${emojis.processing} Downloading... ${progress.toFixed(2)}%\n${progressBar}`);
+                return; // If successful, exit the function
+            } catch (error) {
+                console.warn(`Failed to update progress message (attempt ${attempt + 1}):`, error.message);
+                if (attempt < maxRetries - 1) {
+                    await new Promise(resolve => setTimeout(resolve, retryDelay));
+                    retryDelay *= 2; // Double the delay for the next attempt
                 }
             }
-    
-    } catch (error) {
-        console.error("Error downloading Facebook video:", error);
-        await buddy.react(m, emojis.error);
-        await buddy.reply(m, `${emojis.error} An error occurred while downloading the video.`);
+        }
+        console.error("Failed to update progress message after multiple attempts");
     }
-};
 
-
+    getProgressBar(progress) {
+        const filledLength = Math.round(progress / 5);
+        return '█'.repeat(filledLength) + '░'.repeat(20 - filledLength);
+    }
+}
 
 module.exports = {
     usage: ["fb", "facebook"],
-    desc: "Download Facebook videos.",
+    desc: "Download Facebook videos with advanced features.",
     commandType: "Download",
     isGroupOnly: false,
     isAdminOnly: false,
@@ -128,52 +183,7 @@ module.exports = {
     emoji: "⬇️",
 
     async execute(sock, m, args) {
-        try {
-            const url = args[0];
-            if (!url) {
-                return await buddy.reply(m, "🔎 Please provide a Facebook video URL or post URL.");
-            }
-
-            // Quality Selection (If you want to provide quality choices)
-            let downloadOptions = `
-📽️ *BUDDY-MD FACEBOOK-DOWNLOADER* 📽️
-
-🔗 Link: ${url}
-
-🔢 Select the download quality:
-
-\`[1] Standard Definition (SD)\`
-\`[2] High Definition (HD)\` (if available)`;
-
-            const beautifulFont = await buddy.changeFont(downloadOptions, 'smallBoldScript');
-            const sentMessage = await buddy.sendImage(m, `https://www.facebook.com/images/fb_icon_325x325.png`, beautifulFont);
-            await buddy.react(m, emojis.downloadChoice);
-
-            const responseMessage = await buddy.getResponseText(m, sentMessage); // 15 seconds timeout
-            if (responseMessage) {
-                await buddy.react(m, emojis.option);
-                let chosenOption = responseMessage.response;
-
-                let format = 'sd'; // Default to SD
-                if (chosenOption === '2' && apiResponse.data.data.hdLink) {
-                    format = 'hd';
-                }
-
-                const apiResponse = await axios.get(`https://api.vihangayt.com/downloader/fb?url=${encodeURIComponent(url)}`);
-
-                if (!apiResponse.data.data.sdLink && !apiResponse.data.data.hdLink) {
-                    return await buddy.reply(m, `${emojis.error} No downloadable links found for this video.`);
-                }
-
-                await downloadFBVideo(sock, m, args, url, format); // Pass the chosen format
-
-            } else {
-                await buddy.reply(m, "⏱️ Timed out waiting for your choice.");
-            }
-        } catch (error) {
-            await buddy.react(m, emojis.error);
-            console.error("Error in Facebook downloader:", error);
-            await buddy.reply(m, "🤖 Oops! Something went wrong. Please try again later.");
-        }
+        const downloader = new FacebookDownloader(sock, m, args);
+        await downloader.execute();
     }
 };

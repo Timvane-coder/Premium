@@ -6,18 +6,30 @@ module.exports = {
     isEnabled: settings.SEND_WELCOME_MESSAGE,
 
     async execute(sock, eventData) {
-        if (eventData.action === 'add') { 
+        if (eventData.action === 'add') {
             const chatId = eventData.id;
             const newMembers = eventData.participants;
+            const groupMetadata = await sock.groupMetadata(m.key.remoteJid);
+            const myID = sock.user.id.split(':')[0] + '@s.whatsapp.net'; // Extract the bot's ID without the resource part
 
-            for (const newMember of newMembers) {
-                try {
-                    const welcomeMessage = formatWelcomeMessage(newMember, settings.WELCOME_MESSAGE);
-                    await sock.sendMessage(chatId, { text: welcomeMessage });
-                } catch (error) {
-                    console.error("Error sending welcome message:", error); // Log errors for debugging
+            const isBotAdmin = groupMetadata.participants.some(
+                (participant) => participant.id === myID && participant.admin !== null
+            );
+
+            if (isBotAdmin) {
+                for (const newMember of newMembers) {
+                    try {
+                        const welcomeMessage = formatWelcomeMessage(newMember, settings.WELCOME_MESSAGE);
+                        await sock.sendMessage(chatId, { text: welcomeMessage });
+                    } catch (error) {
+                        console.error("Error sending welcome message:", error); // Log errors for debugging
+                    }
                 }
+            } else {
+                return
             }
+
+
         }
     }
 };

@@ -22,7 +22,6 @@ async function buddyCmdUpsert(sock, m) {
 
         const [commandName, ...args] = response.slice(prefix.length).trim().split(/\s+/);
         const command = getCommand(commandName);
-        console.log(command, '[[[[[[[[[[[[[[[[[[[[[[[')
 
         if (!command) {
             await handleUnknownCommand(sock, m, commandName, prefix);
@@ -100,7 +99,7 @@ async function checkPermissions(sock, m, command, context) {
 }
 
 async function checkCooldown(sock, m, command, sender) {
-    const cooldownTime = command.cooldown || settings.COMMAND_COOLDOWN_TIME_IN_MS || 3000;
+    const cooldownTime = command.cooldown || settings.COMMAND_COOLDOWN_TIME_IN_MS || 2000;
     const now = Date.now();
     const timestamps = cooldowns.get(sender) || cooldowns.set(sender, new Map()).get(sender);
 
