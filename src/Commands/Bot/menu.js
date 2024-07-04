@@ -18,7 +18,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
 
       commands = getAllCommands();
-    
+
 
       const formatCommandsByType = (commands) => {
         const commandsByType = {};
@@ -30,13 +30,13 @@ module.exports = {
 
         let formattedCommands = '';
         for (const [type, cmds] of Object.entries(commandsByType)) {
-          formattedCommands += `\n\n┌──「 ${type.toUpperCase()} 」`;
+          formattedCommands += `\n\n┌──「 *\`${type.toUpperCase()}\`* 」`;
           cmds.forEach(cmd => {
             const usage = Array.isArray(cmd.usage) ? cmd.usage[0] : cmd.usage;
-            formattedCommands += `\n├ ${cmd.emoji || '▢'} ${settings.PREFIX[0]}${usage}`;
-            if (cmd.desc) {
-              formattedCommands += `\n│  ↳ ${cmd.desc}`;
-            }
+            formattedCommands += `\n├  ${'▢' || cmd.emoji} *${settings.PREFIX[0]}${usage}*`;
+            // if (cmd.desc) {
+            //   formattedCommands += `\n│  ↳ ${cmd.desc}`;
+            // }
           });
           formattedCommands += '\n└────';
         }
@@ -48,28 +48,31 @@ module.exports = {
       const uptimeSeconds = Math.floor(os.uptime() % 60);
 
       const header = `
-╭━━━━「 *${settings.BOT_NAME.toUpperCase()} MENU* 」━━━━╮
-┃ ◈ *Owner:* ${settings.OWNER_NAME}
-┃ ◈ *Language:* ${settings.DEFAULT_TRANSLATION_LANG}
-┃ ◈ *Prefix:* ${settings.PREFIX[0]}
-┃ ◈ *Uptime:* ${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s
-┃ ◈ *Commands:* ${commands.length}
-╰━━━━━━━━━━━━━━━━━━━━━━━━━╯
+╭━━━━「 🤖*${settings.BOT_NAME.toUpperCase()} MENU*🤖 」
+┃ 👑 ◈ *Owner:* ${settings.OWNER_NAME}
+┃ 🌐 ◈ *Language:* ${settings.DEFAULT_TRANSLATION_LANG}
+┃ ⚡ ◈ *Prefix:* ${settings.PREFIX[0]}
+┃ ⏳  ◈ *Uptime:* ${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s
+┃ 🧩 ◈ *Commands:* ${commands.length}
+╰━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Hello! Here's what I can do for you:
 `;
 
       const footer = `
-╭━━━━「 *NOTE* 」━━━━╮
-┃ Use ${settings.PREFIX[0]}help <command> for detailed info
+┏━━━━━━━━ NOTE ━━━━━━━━┓
+┃ Use ${settings.PREFIX[0]}help <command> for details
 ┃ Example: ${settings.PREFIX[0]}help sticker
-╰━━━━━━━━━━━━━━━━━━━╯
+┗━━━━━━━━━━━━━━━━━━━━━┛
+
+💡 Stay updated with our latest features!
+🌟 Enjoy using ${settings.BOT_NAME}!
 `;
 
       const [menuTextStyled, headerStyled, footerStyled] = await Promise.all([
-        buddy.changeFont(formatCommandsByType(commands), 'smallBoldScript'),
-        buddy.changeFont(header, 'geometricModern'),
-        buddy.changeFont(footer, 'vintageTelegraph')
+        buddy.changeFont(formatCommandsByType(commands), 'geometricModern'),
+        buddy.changeFont(header, 'smallBoldScript'),
+        buddy.changeFont(footer, 'smallItalicBoldScript')
       ]);
 
       const completeMenu = headerStyled + menuTextStyled + footerStyled;

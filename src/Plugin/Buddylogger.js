@@ -1,67 +1,92 @@
-const fs = require('fs');
-const path = require('path');
+const winston = require('winston');
+const { format } = winston;
 
-// Log file path
-const logFilePath = path.join(__dirname, 'buddy.log');
+class AdvancedLogger {
+    constructor(options = {}) {
+        this.options = {
+            logLevel: options.logLevel || 'info',
+            colorize: options.colorize !== undefined ? options.colorize : true,
+        };
 
-// Utility function to format current timestamp
-function getTimestamp() {
-    return new Date().toISOString().replace('T', ' ').replace(/\..+/, '');
+        // Create a logger immediately
+        this.initializeLogger();
+    }
+
+    async initializeLogger() {
+        const chalk = await import('chalk');
+        const logFormat = format.combine(
+            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:SSS' }),
+            format.errors({ stack: true }),
+            format.splat(),
+            format.printf(({ level, message, timestamp, ...metadata }) => {
+                let msg = `${this.options.colorize ? chalk.default.gray(timestamp) : timestamp} ${level}: ${message}`;
+                if (Object.keys(metadata).length > 0) {
+                    msg += '\n' + JSON.stringify(metadata, null, 2);
+                }
+                return msg;
+            })
+        );
+
+        const consoleFormat = this.options.colorize
+            ? format.combine(format.colorize(), logFormat)
+            : logFormat;
+
+        this.logger = winston.createLogger({
+            level: this.options.logLevel,
+            format: consoleFormat,
+            transports: [new winston.transports.Console()],
+            exceptionHandlers: [new winston.transports.Console()],
+            rejectionHandlers: [new winston.transports.Console()],
+        });
+    }
+
+    async ensureLogger() {
+        if (!this.logger) {
+            await this.initializeLogger();
+        }
+    }
+
+    async log(level, message, metadata = {}) {
+        await this.ensureLogger();
+        this.logger.log(level, message, metadata);
+    }
+
+    async error(message, metadata = {}) {
+        await this.ensureLogger();
+        this.logger.error(message, metadata);
+    }
+
+    async warn(message, metadata = {}) {
+        await this.ensureLogger();
+        this.logger.warn(message, metadata);
+    }
+
+    async info(message, metadata = {}) {
+        await this.ensureLogger();
+        this.logger.info(message, metadata);
+    }
+
+    async debug(message, metadata = {}) {
+        await this.ensureLogger();
+        this.logger.debug(message, metadata);
+    }
+
+    startTimer() {
+        return process.hrtime();
+    }
+
+    endTimer(start) {
+        const end = process.hrtime(start);
+        return (end[0] * 1000) + (end[1] / 1000000);
+    }
+
+    async logWithDuration(level, message, start, metadata = {}) {
+        const duration = this.endTimer(start);
+        await this.log(level, `${message} (Duration: ${duration.toFixed(3)}ms)`, { ...metadata, duration });
+    }
 }
 
-// Function to write logs to a file
-function writeLogToFile(message) {
-    const logMessage = `[${getTimestamp()}] ${message}\n`;
-    fs.appendFileSync(logFilePath, logMessage, { encoding: 'utf8' });
-}
+// Create and export a singleton instance
+const logger = new AdvancedLogger();
 
-// Function to log information
-async function logCommand(message, ...args) {
-    const chalk = (await import('chalk')).default;
-    const formattedMessage = `[${getTimestamp()}] ${chalk.blue('ℹ️')} ${chalk.green(message)} ${args.length ? JSON.stringify(args) : ''}`;
-    console.log(formattedMessage);
-  //  writeLogToFile(formattedMessage);
-}
-
-// Function to log warnings
-function logWarning(message, ...args) {
-    const formattedMessage = `[${getTimestamp()}] ${chalk.yellow('⚠️')} ${chalk.yellow(message)} ${args.length ? JSON.stringify(args) : ''}`;
-    console.warn(formattedMessage);
-    writeLogToFile(formattedMessage);
-}
-
-// Function to log errors
-async function logError(message, ...args) {
-    const chalk = (await import('chalk')).default;
-    const formattedMessage = `[${getTimestamp()}] ${chalk.red('❌')} ${chalk.red(message)} ${args.length ? JSON.stringify(args) : ''}`;
-    console.error(formattedMessage);
-  //  writeLogToFile(formattedMessage);
-}
-
-// Function to log success messages
-function logSuccess(message, ...args) {
-    const formattedMessage = `[${getTimestamp()}] ${chalk.green('✅')} ${chalk.green(message)} ${args.length ? JSON.stringify(args) : ''}`;
-    console.log(formattedMessage);
-    writeLogToFile(formattedMessage);
-}
-
-// Override console.log to use the log functions
-const originalConsoleLog = console.log;
-console.log = (...args) => logCommand(...args);
-
-const originalConsoleWarn = console.warn;
-console.warn = (...args) => logWarning(...args);
-
-const originalConsoleError = console.error;
-console.error = (...args) => logError(...args);
-
-const originalConsoleInfo = console.info;
-console.info = (...args) => logSuccess(...args);
-
-// Exporting logger functions
-module.exports = {
-    logCommand,
-    logWarning,
-    logError,
-    logSuccess,
-};
+module.exports = logger;

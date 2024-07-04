@@ -9,7 +9,7 @@ module.exports = {
         if (eventData.action === 'add') {
             const chatId = eventData.id;
             const newMembers = eventData.participants;
-            const groupMetadata = await sock.groupMetadata(m.key.remoteJid);
+            const groupMetadata = await sock.groupMetadata(eventData.id);
             const myID = sock.user.id.split(':')[0] + '@s.whatsapp.net'; // Extract the bot's ID without the resource part
 
             const isBotAdmin = groupMetadata.participants.some(

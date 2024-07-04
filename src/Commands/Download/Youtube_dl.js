@@ -100,12 +100,12 @@ module.exports = {
                 let mediaType, quality, fileFormat;
 
                 while (true) {
-                    if (chosenOption === 'a1' || chosenOption === 'a2') {
+                    if (chosenOption === '1' || chosenOption === '2') {
                         mediaType = 'audio';
                         quality = 'highestaudio';
                         fileFormat = 'mp3';
                         break; // Break the loop as the response is valid
-                    } else if (chosenOption === 'v1' || chosenOption === 'v2') {
+                    } else if (chosenOption === '3' || chosenOption === '4') {
                         mediaType = 'video';
                         quality = 'highestvideo';
                         fileFormat = 'mp4';

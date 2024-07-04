@@ -96,14 +96,17 @@ module.exports = {
                 while (true) {
                     switch (chosenOption) {
                         case 'a':
+                            case '1':
                             downloadUrl = videoInfo.download.find(item => item.type === 'audio').link;
                             fileExtension = 'mp3';
                             break;
                         case 'vw':
+                            case '2':
                             downloadUrl = videoInfo.download.find(item => item.type === 'watermark').link;
                             fileExtension = 'mp4';
                             break;
                         case 'v':
+                            case '3':
                             downloadUrl = videoInfo.download.find(item => item.type === 'no-watermark').link;
                             fileExtension = 'mp4';
                             break;

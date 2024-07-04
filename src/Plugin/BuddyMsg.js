@@ -157,6 +157,16 @@ async function buddyMsg(sock) {
         return sock.relayMessage(jid, messageToForward.message, options);
       },
 
+      getQuotedMessage: async (m) => {
+        const quotedMessage = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage
+          || m?.message?.conversation?.contextInfo?.quotedMessage;
+
+        if (quotedMessage) {
+          return quotedMessage;
+        }
+        return null;
+      },
+
       getQuotedText: async (m) => {
         const quotedMessage = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage
           || m?.message?.conversation?.contextInfo?.quotedMessage;

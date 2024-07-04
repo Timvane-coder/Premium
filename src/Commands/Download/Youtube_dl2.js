@@ -93,7 +93,7 @@ module.exports = {
                 await buddy.react(m, emojis.processing);
             
                 while (true) {
-                    if (chosenOption !== 'v1' && chosenOption !== 'v2') {
+                    if (chosenOption !== '1' && chosenOption !== '2') {
                         await buddy.reply(m, "❌ Invalid option. Please choose a valid option (v1 or v2).");
                         const newResponseMessage = await buddy.getResponseText(m, sentMessage); // Prompt again
                         chosenOption = newResponseMessage.response.toLowerCase();
@@ -125,7 +125,7 @@ module.exports = {
                         .on('finish', async () => {
                             const fileSize = fs.statSync(tempPath).size;
                             let sendFunction = buddy.sendVideo;
-                            if (chosenOption === 'v1' || fileSize > 15 * 1024 * 1024) {
+                            if (chosenOption === '1' || fileSize > 15 * 1024 * 1024) {
                                 sendFunction = buddy.sendDocument;
                             }
 

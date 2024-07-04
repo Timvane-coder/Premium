@@ -15,7 +15,7 @@ const logger = pino({
 
 // Plugins
 const { buddyMsg } = require('../Plugin/BuddyMsg');
-const { buddyEvents } = require('../Plugin/BuddyEvent');
+const { initializeBuddyEvents } = require('../Plugin/BuddyEvent');
 const { loadCommands } = require('../Plugin/BuddyLoadCmd');
 const { againstEventManager } = require('../Plugin/BuddyEventHandle');
 
@@ -126,7 +126,7 @@ async function buddyMd(io, app) {
     store.bind(sock.ev);
     // Assuming 'sock' is your socket connection
     await againstEventManager.init(sock);
-    buddyEvents(sock, chalk);
+    initializeBuddyEvents(sock, chalk);
 
     // Advanced presence updates
     setInterval(() => updatePresence(sock), 60000);
