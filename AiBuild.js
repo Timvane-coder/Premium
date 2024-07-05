@@ -289,31 +289,46 @@ const watchForChanges = () => {
 const processWebsiteIteratively = async () => {
     const startTime = performance.now();
     let iteration = 1;
-
+    
     try {
         await fs.mkdir(SRC_FOLDER, { recursive: true });
         await createGitRepo();
-
-        while (true) {
-            const success = await processWebsite(iteration);
-            if (!success) break;
-
-            await runLinters();
-            await runTests();
-            await buildProject();
-            await commitChanges(iteration);
-
-            if (iteration % AUTO_UPGRADE_INTERVAL === 0) {
-                await upgradeScript();
+        
+        const files = await fs.readdir(SRC_FOLDER, { withFileTypes: true });
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.isFile()) {
+                const filePath = path.join(SRC_FOLDER, file.name);
+                let prompt;
+                
+                if (iteration === 1) {
+                    prompt = generateInitialPrompt();
+                } else {
+                    const fileContents = await fs.readFile(filePath, 'utf-8');
+                    prompt = generateEnhancementPrompt(fileContents, iteration);
+                }
+                
+                const success = await processFile(filePath, prompt, iteration);
+                if (!success) break;
+                
+                await runLinters();
+                await runTests();
+                await buildProject();
+                await commitChanges(iteration);
+                
+                if (iteration % AUTO_UPGRADE_INTERVAL === 0) {
+                    await upgradeScript();
+                }
+                
+                if (iteration % AUTO_DEPLOY_INTERVAL === 0) {
+                    await deployWebsite();
+                }
+                
+                iteration++;
             }
-
-            if (iteration % AUTO_DEPLOY_INTERVAL === 0) {
-                await deployWebsite();
-            }
-
-            iteration++;
         }
-
+        
     } catch (error) {
         logger.error(`Error processing website: ${error.message}`);
     } finally {
@@ -322,6 +337,25 @@ const processWebsiteIteratively = async () => {
         logger.success(`Processing completed in ${duration.toFixed(2)} seconds`);
     }
 };
+
+const processFile = async (filePath, prompt, iteration) => {
+    logger.info(`Processing file: ${filePath} (Iteration ${iteration})...`);
+    
+    try {
+        const result = await retry(async () => {
+            const response = await model.generateContent(prompt);
+            return response.response.text();
+        }, MAX_RETRIES, INITIAL_RETRY_DELAY);
+        
+        await processAIResponse(result);
+        logger.success(`Enhanced file: ${filePath} (Iteration ${iteration})`);
+        return true;
+    } catch (error) {
+        logger.error(`Error processing file ${filePath} (Iteration ${iteration}): ${error.message}`);
+        return false;
+    }
+};
+
 
 if (isMainThread) {
     processWebsiteIteratively().catch(error => logger.error(`Unhandled error: ${error.message}`));
