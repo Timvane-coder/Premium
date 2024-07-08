@@ -51,7 +51,7 @@ async function getAuthState() {
                 }
 
                 // If session does not exist in the database, check the file
-                const credsPath = path.resolve(__dirname, './src/Session/creds.json');
+                const credsPath = path.resolve('./src/Session/creds.json');
                 if (fs.existsSync(credsPath)) {
                     const creds = JSON.parse(fs.readFileSync(credsPath, 'utf-8'));
 
@@ -183,13 +183,6 @@ async function buddyMd(io, app) {
         // Assuming 'sock' is your socket connection
         await againstEventManager.init(sock);
         initializeBuddyEvents(sock, chalk);
-
-        // Advanced presence updates
-        setInterval(() => updatePresence(sock), 60000);
-
-        async function updatePresence(sock) {
-            await sock.sendPresenceUpdate('available');
-        }
 
 
         sock.ev.on('creds.update', saveCreds);

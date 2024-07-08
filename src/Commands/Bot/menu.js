@@ -40,7 +40,7 @@ module.exports = {
       
         return Object.entries(commandsByType).map(([type, cmds]) => {
           const formattedCmds = cmds.map(cmd => {
-            return `│ ◈ *${settings.PREFIX[0]}${cmd.usage}*${cmd.desc ? ` - ${cmd.desc}` : ''}`;
+            return `│ ◈ *${settings.PREFIX[0]}${cmd.usage}*`;
           }).join('\n');
 
           return `┌──「 *${type.toUpperCase()}* 」\n${formattedCmds}\n└────`;
