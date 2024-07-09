@@ -51,7 +51,7 @@ class CommandLoader {
       if (command.usage) {
         const usages = Array.isArray(command.usage) ? command.usage : [command.usage];
         usages.forEach(usage => this.commands.set(usage.toLowerCase(), command));
-        console.log(`${colors.green}Loaded command: ${command.usage}${colors.reset}`);
+    //    console.log(`${colors.green}Loaded command: ${command.usage}${colors.reset}`);
 
         if (command.aliases) {
           command.aliases.forEach(alias => {

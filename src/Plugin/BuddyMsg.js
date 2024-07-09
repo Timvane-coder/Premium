@@ -3,6 +3,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const { streamToBuffer } = require('./BuddyStreamToBuffer');
 const fancyScriptFonts = require('./BuddyFonts');
+const sqlite3 = require('sqlite3').verbose();
+const { open } = require('sqlite');
 
 const MAX_LISTENERS = 10;
 const listeners = [];
@@ -16,6 +18,22 @@ async function buddyMsg(sock) {
     Object.keys(require.cache).forEach((key) => {
       delete require.cache[key];
     });
+
+    // Initialize SQLite database
+    const dbPath = path.join(__dirname, 'buddy_database.sqlite');
+    const db = await open({
+      filename: dbPath,
+      driver: sqlite3.Database
+    });
+
+    // Create a table if it doesn't exist
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS buddy_data (
+        key TEXT PRIMARY KEY,
+        value TEXT,
+        level INTEGER DEFAULT 0
+      )
+    `);
 
     const sendMessage = async (jid, content, options = {}) => {
       try {
@@ -335,6 +353,44 @@ async function buddyMsg(sock) {
         await fs.writeFile(tempPath, bufferData);
         return tempPath;
       },
+
+        // New database functions
+        dbSave: async (key, value) => {
+          await db.run('INSERT OR REPLACE INTO buddy_data (key, value) VALUES (?, ?)', [key, JSON.stringify(value)]);
+        },
+  
+        dbGet: async (key) => {
+          const result = await db.get('SELECT value FROM buddy_data WHERE key = ?', [key]);
+          return result ? JSON.parse(result.value) : null;
+        },
+  
+        dbRemove: async (key) => {
+          await db.run('DELETE FROM buddy_data WHERE key = ?', [key]);
+        },
+  
+        dbLevel: async (key, increment = 1) => {
+          await db.run('INSERT OR REPLACE INTO buddy_data (key, level) VALUES (?, COALESCE((SELECT level FROM buddy_data WHERE key = ?) + ?, 1))', [key, key, increment]);
+          const result = await db.get('SELECT level FROM buddy_data WHERE key = ?', [key]);
+          return result ? result.level : null;
+        },
+  
+        dbGetLevel: async (key) => {
+          const result = await db.get('SELECT level FROM buddy_data WHERE key = ?', [key]);
+          return result ? result.level : 0;
+        },
+  
+        dbGetAll: async () => {
+          const results = await db.all('SELECT key, value, level FROM buddy_data');
+          return results.map(row => ({
+            key: row.key,
+            value: JSON.parse(row.value),
+            level: row.level
+          }));
+        },
+  
+        dbClear: async () => {
+          await db.run('DELETE FROM buddy_data');
+        },  
     };
   } catch (err) {
     console.error(`${RED}Error in buddyMsg: ${err.message}${RESET}`);

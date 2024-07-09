@@ -1,3 +1,5 @@
+console.log('🐾 Starting...');
+
 const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, makeInMemoryStore, delay } = require("@whiskeysockets/baileys");
 const { Boom } = require("@hapi/boom");
 const pino = require('pino');
@@ -135,7 +137,7 @@ async function buddyMd(io, app) {
             },
             patchMessageBeforeSending: async (msg, recipientJids) => {
                 await sock.uploadPreKeysToServerIfRequired();
-                // messagesSent = messagesSent + 1;
+                messagesSent = messagesSent + 1;
 
                 // // Emit 'messageCount' event to all connected clients with updated count
                 // io.emit('messageCount', messagesSent);
@@ -203,19 +205,24 @@ async function buddyMd(io, app) {
 
             if (connection === "open") {
                 try {
+                    console.log(chalk.cyan('Checking Connection....'));
+                    console.log(chalk.cyan('Making Socket....'));
+                    console.log(chalk.cyan('Calling Socket...'));
                     console.log(chalk.cyan('Connected! 🔒✅'));
                     // Don't Remove budd
                     buddyMsg(sock);
                     return new Promise((resolve, reject) => {
+                        // Restart timer (refactored)
                         setTimeout(async () => {
                             try {
-                                console.log(chalk.yellow('Restarting socket to clear in-memory store...'))
-                                await sock.end({ reason: 'Clearing store' }); // Disconnect gracefully
-                                resolve();
+                                console.log(chalk.yellow('Restarting socket...'));
+                                await sock.end({ reason: 'Clearing store' });
                             } catch (error) {
-                                reject(error);
+                                console.error(chalk.red('Error restarting socket:'), error.message);
+                            } finally {
+                                buddyMd(io, app);
                             }
-                        }, 30 * 60 * 1000);
+                        }, 300 * 60 * 1000); // 300 minutes
                     });
                 } catch (err) {
                     console.log('Error in:', err)
