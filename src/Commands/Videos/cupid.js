@@ -12,8 +12,8 @@ module.exports = {
   emoji: "🇰🇷",
   async execute(sock, m) {
     try {
-      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/VID-20240703-WA0001.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'cupid by Fifty Fifty');
+      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/Cupid.mp4";
+      await buddy.sendVideo(m, menuVideoBuffer,'cupid official music video by Fifty Fifty');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
