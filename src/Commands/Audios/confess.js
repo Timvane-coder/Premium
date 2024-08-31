@@ -9,11 +9,13 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇰🇷",
+  emoji: "🇲🇼",
   async execute(sock, m) {
     try {
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/Menu2.jpeg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/confess.webp');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
+      await buddy.sendImage(m, menuImageBuffer,'trailer');
+
       const menuAudioBuffer = "https://mustard-bird-6502.twil.io/assets/DRIEMO.mp3";
       await buddy.sendAudio(m, menuAudioBuffer);
 
