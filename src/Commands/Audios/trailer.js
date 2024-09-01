@@ -12,6 +12,11 @@ module.exports = {
   emoji: "🇰🇷",
   async execute(sock, m) {
     try {
+
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/confess.webp');
+      const menuImageBuffer = fs.readFileSync(menuImagePath);
+      await buddy.sendImage(m, menuImageBuffer,'confesion OST by Lim Kim from King the Land');
+      
       const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/confession%20.mp3";
       await buddy.sendAudio(m, menuAudioBuffer);
 
