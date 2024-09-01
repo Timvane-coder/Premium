@@ -15,7 +15,7 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/confess.webp');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'confesion is an Original Soundtrack done by Lim Kim; the Audio was taken from a hit Korea-Netflix drama King the Land');
+      await buddy.sendImage(m, menuImageBuffer,'confesion is an Original Soundtrack done by a South Korean Singer Lim Kim; the Audio was taken from a hit Korean-Netflix drama King the Land');
       
       const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/confession%20.mp3";
       await buddy.sendAudio(m, menuAudioBuffer);
