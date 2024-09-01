@@ -12,6 +12,11 @@ module.exports = {
   emoji: "🇰🇷",
   async execute(sock, m) {
     try {
+
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/rush.png');
+      const menuImageBuffer = fs.readFileSync(menuImagePath);
+      await buddy.sendImage(m, menuImageBuffer,'rush by Ayrar star');
+      
       const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/Rush.mp3";
       await buddy.sendAudio(m, menuAudioBuffer);
 
