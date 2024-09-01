@@ -12,6 +12,11 @@ module.exports = {
   emoji: "🇰🇷",
   async execute(sock, m) {
     try {
+
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/zeze.jpg');
+      const menuImageBuffer = fs.readFileSync(menuImagePath);
+      await buddy.sendImage(m, menuImageBuffer,'maluzi remake by zeze:original done by Collins Bandawe');
+      
       const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/maluzi.mp3";
       await buddy.sendAudio(m, menuAudioBuffer);
 
