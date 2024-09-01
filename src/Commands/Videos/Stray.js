@@ -4,7 +4,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["YouMe"],
+  usage: ["chic_chic_boom_mv"],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Videos",
   isGroupOnly: false,
@@ -14,12 +14,12 @@ module.exports = {
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/jennie.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/stray.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'You and Me is a record breaking kpop song by a South korean rapper Jennie Kim of Blackpink gir group band formed by YG entertainment');
+      await buddy.sendImage(m, menuImageBuffer,'Chic Chic Boom is a Music Video by South Korean k-pop Boy Band Stray kids currently managed by JYP Entertainment');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/YouMe.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official You and Me Music Video');
+      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/boom.mp4";
+      await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Chic Chic Boom Music Video');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
