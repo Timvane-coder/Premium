@@ -12,8 +12,12 @@ module.exports = {
   emoji: "🇰🇷",
   async execute(sock, m) {
     try {
+
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/kellkay.jpg');
+      const menuImageBuffer = fs.readFileSync(menuImagePath);
+      await buddy.sendImage(m, menuImageBuffer,'bana pwanya by Kell kay ft Yo Maps and Prince Luv');
       const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/bana.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'menu');
+      await buddy.sendVideo(m, menuVideoBuffer,'480 GP* Bana pwanya');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
