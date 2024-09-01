@@ -15,10 +15,10 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/cupid.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'cupid official music video by South Korea girl group fifty fifty');
+      await buddy.sendImage(m, menuImageBuffer,'cupid is a musical video by a South Korea girl group fifty fifty managed by Attrakt Records');
       
       const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/Cupid.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'Webgl Format* cupid');
+      await buddy.sendVideo(m, menuVideoBuffer,'Webgl Format* Cupid Official Musical Video');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
