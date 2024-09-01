@@ -15,10 +15,10 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/kellkay.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'bana pwanya is a musical Audio by a Malawian Singer Kell kay;the Song  features two Zambian artists Yo Maps and Prince Luv');
+      await buddy.sendImage(m, menuImageBuffer,'bana pwanya is a musical Video by a Malawian Singer Kell kay;the Song features two Zambian artists Yo Maps and Prince Luv');
       
       const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/bana.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* Bana pwanya');
+      await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* Bana Pwanya Official Music Video');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
