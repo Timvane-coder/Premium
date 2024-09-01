@@ -9,16 +9,16 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇰🇷",
+  emoji: "🇿🇦",
   async execute(sock, m) {
     try {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/water.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer, 'water by a South African grammy winning pop star Tyla');
+      await buddy.sendImage(m, menuImageBuffer, 'Water is a musical Video by a South African grammy winning pop star Tyla');
       
       const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/Water.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* water');
+      await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* Water official Musical Video');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
