@@ -15,10 +15,10 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/jennie.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'You and Me is a record breaking kpop song by a South korean rapper Jennie Kim');
+      await buddy.sendImage(m, menuImageBuffer,'You and Me is a record breaking kpop song by a South korean rapper Jennie Kim of Blackpink gir group band formed by YG entertainment');
       
       const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/YouMe.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official You and Me music Video');
+      await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official You and Me Music Video');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
