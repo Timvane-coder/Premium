@@ -12,6 +12,10 @@ module.exports = {
   emoji: "🇰🇷",
   async execute(sock, m) {
     try {
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/onesimus.jpg');
+      const menuImageBuffer = fs.readFileSync(menuImagePath);
+      await buddy.sendImage(m, menuImageBuffer,'controller by onesimus');
+      
       const menuAudioBuffer = "https://mustard-bird-6502.twil.io/assets/Onesimus.mp3";
       await buddy.sendAudio(m, menuAudioBuffer);
 
