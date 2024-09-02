@@ -13,7 +13,7 @@ module.exports = {
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/water.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/tyla.jpeg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Water is a Grammy Winning Music Audio by a South African Pop Diva Tyla');
       
