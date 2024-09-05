@@ -1,0 +1,78 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: http://127.0.0.1:3000/files/Offline-first-App/public/index.html?_xsrf=2%7C95dc51bc%7C03c5df6edf120280ef494f54b19020cc%7C1725049526
+Subject: Blogger
+Date: Wed, 4 Sep 2024 22:39:58 +0200
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--NZC3COhd2ASLFhKFZgXCbzqWVu2zt1OGu23NSUItlV----"
+
+
+------MultipartBoundary--NZC3COhd2ASLFhKFZgXCbzqWVu2zt1OGu23NSUItlV----
+Content-Type: text/html
+Content-ID: <frame-8C896327E091BE5A2E0A5EEF7BF7C4C6@mhtml.blink>
+Content-Transfer-Encoding: binary
+Content-Location: http://127.0.0.1:8888/files/Offline-first-App/public/index.html?_xsrf=2%7C95dc51bc%7C03c5df6edf120280ef494f54b19020cc%7C1725049526
+
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="http://127.0.0.1:8888/css/style.css">
+    <title>Vespertine</title>
+    <link rel="apple-touch-icon" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-icon-180.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#764ABC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="http://127.0.0.1:8888/manifest">
+
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2732-2048.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2388-1668.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1536-2048.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2048-1536.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1668-2224.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2224-1668.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1620-2160.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2160-1620.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1284-2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2778-1284.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1170-2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2532-1170.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1125-2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2436-1125.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1242-2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2688-1242.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-828-1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1792-828.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1242-2208.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-2208-1242.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-750-1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1334-750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="http://127.0.0.1:8888/files/Offline-first-App/public/icons/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+  </head>
+  <body>
+    <main>
+      <nav>
+        <h1>Blogger</h1>
+        <ul>
+          <li>Home</li>
+          <li class="active">Blog</li>
+        </ul>
+      </nav>
+      <div class="container"></div>
+    </main>
+    
+  
+
+</body></html>
+------MultipartBoundary--NZC3COhd2ASLFhKFZgXCbzqWVu2zt1OGu23NSUItlV----
+Content-Type: text/css
+Content-Transfer-Encoding: binary
+Content-Location: http://127.0.0.1:8888/css/style.css
+
+@charset "utf-8";
+
+
+------MultipartBoundary--NZC3COhd2ASLFhKFZgXCbzqWVu2zt1OGu23NSUItlV------
