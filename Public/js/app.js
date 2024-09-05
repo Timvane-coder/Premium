@@ -1,6 +1,6 @@
 let result = "";
 
-fetch("http://127.0.0.1:9001/blogs")
+fetch("https://premierexpo-b23e048e8f33.herokuapp.com/blogs")
   .then((res) => res.json())
   .then(({ rows } = data) => {
     rows.forEach(({ title, avatar, intro } = rows) => {
