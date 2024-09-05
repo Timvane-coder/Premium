@@ -6,7 +6,7 @@ const { buddyStatistic } = require('./src/Plugin/BuddyStatistic');
 const socketIo = require('socket.io'); // Require Socket.IO
 const sqlite3 = require("sqlite3").verbose();
 const app = express();
-const port = process.env.PORT || 9001;
+const port = process.env.PORT || 5001;
 const server = http.createServer(app);
 const io = socketIo(server); // Initialize Socket.IO with the HTTP server
 
