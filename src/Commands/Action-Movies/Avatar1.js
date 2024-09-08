@@ -5,7 +5,7 @@ const os = require('os');
 module.exports = {
   usage: ["avatar_1"],
   desc: "Display the bot's menu with categories and command details.",
-  commandType: "Videos",
+  commandType: "Action_Movies",
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Shop for killers is a song by American singer Hailee Steinfeld and Swedish record producer Alesso, featuring American country music duo Florida Georgia Line and American singer-songwriter Watt');
       
-      const menuVideoBuffer = "https://download948.mediafire.com/41wh800zj3fgV9_yDxYWcFJR0OYrPb3cBoQeFhdie3SZb8KZZp6KGfc7pCfPI4LqH_eOpvljqgNNaWbjIn0f0z8pYQTQ1-AtfJ3d-XQgDqQudwP6BXP4UZIaetTiQDm7u9mIuu6CLMncyB4xjJzvfzU6QvJoMBVjBSXTy0Hut9-rbw/zeqmd9w7rv2yf11/Avatar_1A.mp4";
+      const menuVideoBuffer = "https://download2302.mediafire.com/v3p0esh091qgAK5obhpBAR4Kq6_yU4nrbg5h05BlShIg85xGEpHlqr752IL7I56v0QYLgvOpryTXbeBOLogcVFYcEmWNcyewV1BoU8vRZjTpDgvdry-H1sGZeex0uGizTdtg-NN7dnEBf1ZPFqjtJLqfDUJT4tIZiDdVGXB4hH2NjmA/0mmmyn19s28kdqy/A.Shop.for.Killers.E04.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* Let Me Go Official Musical Video');
 
     } catch (error) {
