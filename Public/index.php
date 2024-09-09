@@ -166,7 +166,60 @@
     <script src="js/app.js"></script>
   </body>
 
-<html lang="en">
+<body class="bg-gradient-to-br from-gray-700 via-blue-800 to-purple-900 min-h-screen font-roboto text-white" id="body">
+    <header class="text-center mb-12">
+        <h1
+            class="text-6xl font-bold mb-4 font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+            Vespertine-MD</h1>
+        <p class="text-2xl text-blue-300 animate-pulse">WhatsApp Automation BY Vespertine </p>
+    </header>
+<main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <section class="glassmorphism p-8 shadow-2xl">
+            <h2 class="text-3xl font-bold mb-8 text-center font-orbitron">Dashboard</h2>
+            <div class="mb-8 h-64">
+                <canvas id="ramUsageChart"></canvas>
+                <canvas id="networkUsageChart" style="display: none;"></canvas>
+                <canvas id="diskUsageChart" style="display: none;"></canvas>
+            </div>
+            <div class="flex justify-center space-x-4 mb-4">
+                <button id="ramUsageBtn"
+                    class="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    RAM Usage
+                </button>
+                <button id="networkUsageBtn"
+                    class="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400">
+                    Network Usage
+                </button>
+                <button id="diskUsageBtn"
+                    class="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    Disk Usage
+                </button>
+            </div>
+        </section>
+
+
+
+        <section class="glassmorphism p-8 shadow-2xl">
+            <h2 class="text-3xl font-bold mb-8 text-center font-orbitron">Statistics</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                    <h3 class="text-xl mb-2">Active Users</h3>
+                    <p class="text-3xl font-bold"><span id="buddysonline"></span></p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                    <h3 class="text-xl mb-2">Messages Sent</h3>
+                    <p class="text-3xl font-bold"><span id="messageSent">0</span></p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                    <h3 class="text-xl mb-2">Uptime</h3>
+                    <p class="text-3xl font-bold"><span id="uptime"></span></p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                    <h3 class="text-xl mb-2">Response Time</h3>
+                    <p class="text-3xl font-bold"><span id="responseTime"></span></p>
+                </div>
+            </div>
+        </section>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -245,213 +298,6 @@
     </script>
 
 </body>
-
-
-<body class="bg-gradient-to-br from-gray-700 via-blue-800 to-purple-900 min-h-screen font-roboto text-white" id="body">
-    <header class="text-center mb-12">
-        <h1
-            class="text-6xl font-bold mb-4 font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-            Vespertine-MD</h1>
-        <p class="text-2xl text-blue-300 animate-pulse">WhatsApp Automation BY Vespertine </p>
-    </header>
-
-
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <title>Blogger</title>
-    <link rel="apple-touch-icon" href="icons/apple-icon-180.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="theme-color" content="#764ABC"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="/manifest" />
-
-
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1242-2688.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-2688-1242.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-828-1792.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1792-828.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1242-2208.jpg"
-      media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-2208-1242.jpg"
-      media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-750-1334.jpg"
-      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1334-750.jpg"
-      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-640-1136.jpg"
-      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1136-640.jpg"
-      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1242-2688.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-2688-1242.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-828-1792.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1792-828.jpg"
-      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1242-2208.jpg"
-      media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-2208-1242.jpg"
-      media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-750-1334.jpg"
-      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1334-750.jpg"
-      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-640-1136.jpg"
-      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1136-640.jpg"
-      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-2048-2732.jpg"
-      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-2732-2048.jpg"
-      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-1668-2388.jpg"
-      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-    />
-    <link
-      rel="apple-touch-startup-image"
-      href="icons/apple-splash-2388-1668.jpg"
-      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-    />
-</head>
-  <body>
-    <main>
-      <nav>
-        <h1>Music</h1>
-        <ul>
-          <li>Chart</li>
-          <li class="active">Songs</li>
-        </ul>
-      </nav>
-      <div class="container"></div>
-    </main>
-    <script src="js/app.js"></script>
-  </body>
-
-
-  
-    <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <section class="glassmorphism p-8 shadow-2xl">
-            <h2 class="text-3xl font-bold mb-8 text-center font-orbitron">Dashboard</h2>
-            <div class="mb-8 h-64">
-                <canvas id="ramUsageChart"></canvas>
-                <canvas id="networkUsageChart" style="display: none;"></canvas>
-                <canvas id="diskUsageChart" style="display: none;"></canvas>
-            </div>
-            <div class="flex justify-center space-x-4 mb-4">
-                <button id="ramUsageBtn"
-                    class="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
-                    RAM Usage
-                </button>
-                <button id="networkUsageBtn"
-                    class="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400">
-                    Network Usage
-                </button>
-                <button id="diskUsageBtn"
-                    class="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    Disk Usage
-                </button>
-            </div>
-        </section>
-
-
-
-        <section class="glassmorphism p-8 shadow-2xl">
-            <h2 class="text-3xl font-bold mb-8 text-center font-orbitron">Statistics</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                    <h3 class="text-xl mb-2">Active Users</h3>
-                    <p class="text-3xl font-bold"><span id="buddysonline"></span></p>
-                </div>
-                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                    <h3 class="text-xl mb-2">Messages Sent</h3>
-                    <p class="text-3xl font-bold"><span id="messageSent">0</span></p>
-                </div>
-                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                    <h3 class="text-xl mb-2">Uptime</h3>
-                    <p class="text-3xl font-bold"><span id="uptime"></span></p>
-                </div>
-                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                    <h3 class="text-xl mb-2">Response Time</h3>
-                    <p class="text-3xl font-bold"><span id="responseTime"></span></p>
-                </div>
-            </div>
-        </section>
 
         <section class="mt-12 text-center">
         <div class="typing-text text-2xl text-blue-300">
