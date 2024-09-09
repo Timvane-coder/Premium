@@ -42,20 +42,20 @@ let blogs = [
 let songs = [
   {
     id: "1",
-    title: "confesion",
-    avatar: "images/blog1.jpg",
+    title: "longing dance by Lee Ji Eun",
+    avatar: "images/jennie.jpg",
     path:"images/longing.mp3",
   },
   {
     id: "2",
-    title: "longing",
-    avatar: "images/blog2.jpg",
-    path:"images/confesion.mp3",
+    title: "yamica by Jose Joaquim Chefe",
+    avatar: "images/jose.jpg",
+    path:"images/yamica.mp3",
   },
   {
     id: "3",
-    title: "hold me",
-    avatar: "images/blog1.jpg",
+    title: "hold me by Heize",
+    avatar: "images/heize.webp",
     path:"images/hold_me.mp3",
   },
 ];
