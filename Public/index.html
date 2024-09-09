@@ -220,7 +220,7 @@
                 </div>
             </div>
         </section>
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music App</title>
@@ -248,8 +248,8 @@
             cursor: pointer;
         }
     </style>
-</head>
-<body>
+  </head>
+ <body>
 
     <h1>Music App</h1>
     <div id="music-list"></div>
@@ -257,7 +257,7 @@
     <script>
         async function fetchMusicData() {
             try {
-                const response = await fetch("http://127.0.0.1:9001/music");
+                const response = await fetch("https://premierexpo-b23e048e8f33.herokuapp.com/music");
                 const data = await response.json();
                 const musicList = data.music;
 
