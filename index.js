@@ -49,7 +49,7 @@ let songs = [
   {
     id: "2",
     title: "yamica by Jose Joaquim Chefe",
-    avatar: "images/jose.jpg",
+    avatar: "images/josep.jpg",
     path:"images/yamica.mp3",
   },
   {
