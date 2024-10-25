@@ -1,6 +1,6 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
-require('dotenv').config();
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const { buddyMd } = require('./src/Utils/Buddy');
