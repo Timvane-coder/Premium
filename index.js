@@ -54,6 +54,12 @@ let songs = [
   },
   {
     id: "3",
+    title: "Hapa by Emmie Deeebo",
+    avatar: "images/emmie.jpg",
+    path:"images/hapa.mp3",
+  },
+  {
+    id: "4",
     title: "hold me by Heize",
     avatar: "images/heize.webp",
     path:"images/hold_me.mp3",
