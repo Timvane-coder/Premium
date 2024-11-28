@@ -1,1 +1,7 @@
 
+{
+    "appSecret": "cb708761bfb3273c33fd0e46dc18a523",
+    "pageAccessToken": "EAA26jA0DZCdsBOwX6pWLvz0I4LrtSUhLtZBs0xHkjQn9uLZA3rnMELBkqvUpBRvjW1ZB5J5QoYI5PvgSxC8Gw970v7TgvXrhS1PfB6JSOpwlcJYLfbNCxvgFPwqxPNWrQMbJQ1yeSikKCHnLHSucib4oJq64nbKSb3XcXgNCz0CBF7RhrgT3pSsCK3fRrZACC",
+    "validationToken": "YOUR_VALIDATION_TOKEN",
+    "serverURL": "SERVER_URL"
+}
