@@ -207,8 +207,11 @@ function receivedMessage(event) {
         //sendHelpOptionsAsQuickReplies(senderID);
         sendHelpOptionsAsButtonTemplates(senderID);
         break;
-      case 'shop':
+      case 'menu':
         sendHelpOptionsAsQuickReplies(senderID);
+        break;
+      case 'shop':
+        sendTshirtShop(senderID);
         break;
       case 'start':
         sendTshirtShopMore(senderID);
