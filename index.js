@@ -275,13 +275,19 @@ function sendTshirtShop(recipientId) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "list",
+          template_type: "generics",
           top_element_style: "compact",
           elements: [
             {
               title: "Classic White T-Shirt",
               subtitle: "See all our colors",
               image_url: "https://bit.ly/imageHeadphones",
+              "default_action": {
+                            "type": "web_url",
+                            "url": "https://bit.ly/webHeadphones",
+                            "webview_height_ratio": "tall",
+                        },
+                  
             },
             {
               title: "Classic Gray T-Shirt",
@@ -320,7 +326,7 @@ function sendTshirtShopMore(recipientId) {
           order_number: "12345678902",
           currency: "IDR",
           payment_method: "Visa 2345",
-          order_url: "https://example.com/order/123456",
+          order_url: "https://bit.ly/imageHeadphones",
           timestamp: "1428444852",
           address: {
             street_1: "Jalan Haji Arshad",
@@ -353,7 +359,7 @@ function sendTshirtShopMore(recipientId) {
               quantity: 2,
               price: 50000,
               currency: "IDR",
-              image_url: "https://example.com/images/white-tshirt.jpg",
+              image_url: "https://bit.ly/imageHeadphones",
             },
             {
               title: "Classic Gray T-Shirt",
@@ -361,7 +367,7 @@ function sendTshirtShopMore(recipientId) {
               quantity: 1,
               price: 25000,
               currency: "IDR",
-              image_url: "https://example.com/images/gray-tshirt.jpg",
+              image_url: "https://bit.ly/imageHeadphones",
             },
           ],
         },
