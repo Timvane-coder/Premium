@@ -291,7 +291,7 @@ function sendTshirtShop(recipientId) {
             {
               title: "Premium T-Shirt Collection",
               subtitle: "Explore premium colors",
-              image_url: "https://example.com/premium-tshirt.jpg",
+              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
               buttons: [
                 {
                   title: "Buy Now",
