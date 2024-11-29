@@ -263,118 +263,117 @@ function sendHelpOptionsAsQuickReplies(recipientId) {
   callSendAPI(messageData);
 }
 
+
 function sendTshirtShop(recipientId) {
-  console.log("[sendHelpOptionsAsQuickReplies] Sending the help options menu");
-  var messageData = {
+  console.log("[sendTshirtShop] Sending the T-shirt options menu");
+
+  const messageData = {
     recipient: {
-      id: recipientId
+      id: recipientId,
     },
     message: {
       attachment: {
         type: "template",
         payload: {
           template_type: "list",
-          top_element_style: "large",
+          top_element_style: "compact",
           elements: [
             {
-              title: "Classic T-Shirt Collection",
+              title: "Classic White T-Shirt",
               subtitle: "See all our colors",
-              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
-              buttons: [
-                {
-                  title: "Buy Now",
-                  type: "postback",
-                  payload: "BUY_CLASSIC"
-                }
-              ]
+              image_url: "https://example.com/images/white-tshirt.jpg",
             },
             {
-              title: "Premium T-Shirt Collection",
-              subtitle: "Explore premium colors",
-              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
-              buttons: [
-                {
-                  title: "Buy Now",
-                  type: "postback",
-                  payload: "BUY_PREMIUM"
-                }
-              ]
-            }
-          ]
-        }
-      }
-    }
+              title: "Classic Gray T-Shirt",
+              subtitle: "Premium soft cotton",
+              image_url: "https://example.com/images/gray-tshirt.jpg",
+            },
+          ],
+          buttons: [
+            {
+              title: "Buy Now",
+              type: "postback",
+              payload: "VIEW_MORE", // Custom payload for postback handling
+            },
+          ],
+        },
+      },
+    },
   };
 
   callSendAPI(messageData);
 }
 
-function sendTshirtShopMore(recipientId, requestForHelpOnFeature) {
-  console.log("Tshirt view more");
-  var messageData = {
+function sendTshirtShopMore(recipientId) {
+  console.log("[sendTshirtShopMore] Sending the detailed receipt");
+
+  const messageData = {
     recipient: {
-      id: recipientId
+      id: recipientId,
     },
     message: {
-      attachment:{
-        type:"template",
-        payload:{
-          template_type:"receipt",
-          recipient_name:"Asep Setyawan",
-          order_number:"12345678902",
-          currency:"IDR",
-          payment_method:"Visa 2345",        
-          order_url:"https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
-          timestamp:"1428444852",         
-          address:{
-            street_1:"Jalan Haji Arshad",
-            street_2:"",
-            city:"Jakarta Barat",
-            postal_code:"94025",
-            state:"JKT",
-            country:"ID"
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "receipt",
+          recipient_name: "Asep Setyawan",
+          order_number: "12345678902",
+          currency: "IDR",
+          payment_method: "Visa 2345",
+          order_url: "https://example.com/order/123456",
+          timestamp: "1428444852",
+          address: {
+            street_1: "Jalan Haji Arshad",
+            street_2: "",
+            city: "Jakarta Barat",
+            postal_code: "94025",
+            state: "JKT",
+            country: "ID",
           },
-          summary:{
-            subtotal:75.000,
-            shipping_cost:4.95,
-            total_tax:6.19,
-            total_cost:200000
+          summary: {
+            subtotal: 75000, // Correctly formatted subtotal value
+            shipping_cost: 4950,
+            total_tax: 6190,
+            total_cost: 86140, // Adjusted total
           },
-          adjustments:[
+          adjustments: [
             {
-              name:"New Customer Discount",
-              amount:20
+              name: "New Customer Discount",
+              amount: 2000,
             },
             {
-              name:"$10 Off Coupon",
-              amount:10
-            }
+              name: "$10 Off Coupon",
+              amount: 10000,
+            },
           ],
-          elements:[
+          elements: [
             {
-              title:"Classic White T-Shirt",
-              subtitle:"100% Soft and Luxurious Cotton",
-              quantity:2,
-              price:50,
-              currency:"IDR",
-              image_url:"https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg"
+              title: "Classic White T-Shirt",
+              subtitle: "100% Soft and Luxurious Cotton",
+              quantity: 2,
+              price: 50000,
+              currency: "IDR",
+              image_url: "https://example.com/images/white-tshirt.jpg",
             },
             {
-              title:"Classic Gray T-Shirt",
-              subtitle:"100% Soft and Luxurious Cotton",
-              quantity:1,
-              price:25,
-              currency:"IDR",
-              image_url:"https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg"
-            }
-          ]
-        }
-      }
-    }
+              title: "Classic Gray T-Shirt",
+              subtitle: "100% Soft and Luxurious Cotton",
+              quantity: 1,
+              price: 25000,
+              currency: "IDR",
+              image_url: "https://example.com/images/gray-tshirt.jpg",
+            },
+          ],
+        },
+      },
+    },
   };
 
   callSendAPI(messageData);
 }
+
+      
+
 
 /*
  * Send a message with buttons that allow the user to select from
