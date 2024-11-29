@@ -324,7 +324,7 @@ function sendTshirtShopMore(recipientId, requestForHelpOnFeature) {
           order_number:"12345678902",
           currency:"IDR",
           payment_method:"Visa 2345",        
-          order_url:"http://petersapparel.parseapp.com/order?order_id=123456",
+          order_url:"https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
           timestamp:"1428444852",         
           address:{
             street_1:"Jalan Haji Arshad",
