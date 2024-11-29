@@ -210,6 +210,9 @@ function receivedMessage(event) {
       case 'shop':
         sendTshirtShopMore(senderID);
         break;
+      case 'start':
+        sendHelpOptionsAsQuickReplies(senderID);
+        break;
       default:
         // otherwise, just echo it back to the sender
         sendTextMessage(senderID, messageText);
