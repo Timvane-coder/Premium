@@ -208,10 +208,10 @@ function receivedMessage(event) {
         sendHelpOptionsAsButtonTemplates(senderID);
         break;
       case 'shop':
-        sendTshirtShopMore(senderID);
+        sendHelpOptionsAsQuickReplies(senderID);
         break;
       case 'start':
-        sendHelpOptionsAsQuickReplies(senderID);
+        sendTshirtShopMore(senderID);
         break;
       default:
         // otherwise, just echo it back to the sender
