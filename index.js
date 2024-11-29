@@ -281,12 +281,12 @@ function sendTshirtShop(recipientId) {
             {
               title: "Classic White T-Shirt",
               subtitle: "See all our colors",
-              image_url: "https://example.com/images/white-tshirt.jpg",
+              image_url: "https://bit.ly/imageHeadphones",
             },
             {
               title: "Classic Gray T-Shirt",
               subtitle: "Premium soft cotton",
-              image_url: "https://example.com/images/gray-tshirt.jpg",
+              image_url: "https://bit.ly/imageHeadphones",
             },
           ],
           buttons: [
