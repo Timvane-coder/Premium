@@ -273,27 +273,34 @@ function sendTshirtShop(recipientId) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "generic",
-          top_element_style: "compact",
+          template_type: "list",
+          top_element_style: "large",
           elements: [
             {
               title: "Classic T-Shirt Collection",
               subtitle: "See all our colors",
-              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",         
+              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
+              buttons: [
+                {
+                  title: "Buy Now",
+                  type: "postback",
+                  payload: "BUY_CLASSIC"
+                }
+              ]
             },
             {
-              title: "Classic T-Shirt Collection",
-              subtitle: "See all our colors",
-              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",          
+              title: "Premium T-Shirt Collection",
+              subtitle: "Explore premium colors",
+              image_url: "https://example.com/premium-tshirt.jpg",
+              buttons: [
+                {
+                  title: "Buy Now",
+                  type: "postback",
+                  payload: "BUY_PREMIUM"
+                }
+              ]
             }
-          ],
-          buttons: [
-            {
-              title: "Beli",
-              type: "postback",
-              payload: "VIEW_MORE"            
-            }
-          ]  
+          ]
         }
       }
     }
