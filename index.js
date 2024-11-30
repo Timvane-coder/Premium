@@ -213,6 +213,9 @@ function receivedMessage(event) {
       case 'audio':
         sendAudioMessage(senderID);
         break;
+      case 'video':
+        sendVideoMessage(senderID);
+        break;
       case 'shop':
         sendTshirtShop(senderID);
         break;
@@ -324,6 +327,24 @@ function sendAudioMessage(recipientId) {
         type: "audio",
         payload: {
           url: "https://coral-ape-1798.twil.io/assets/water.mp3"
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+function sendVideoMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "video",
+        payload: {
+          url: "https://coral-ape-1798.twil.io/assets/trailer.mp4"
         }
       }
     }
