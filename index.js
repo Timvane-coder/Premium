@@ -210,6 +210,9 @@ function receivedMessage(event) {
       case 'menu':
         sendHelpOptionsAsQuickReplies(senderID);
         break;
+      case 'audio':
+        sendAudioMessage(senderID);
+        break;
       case 'shop':
         sendTshirtShop(senderID);
         break;
@@ -307,6 +310,24 @@ function sendTshirtShop(recipientId) {
       }
     }
   };  
+
+  callSendAPI(messageData);
+}
+
+function sendAudioMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "audio",
+        payload: {
+          url: "https://coral-ape-1798.twil.io/assets/water.mp3"
+        }
+      }
+    }
+  };
 
   callSendAPI(messageData);
 }
