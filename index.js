@@ -217,8 +217,11 @@ function receivedMessage(event) {
         sendVideoMessage(senderID);
         break;
       case 'shop':
-        sendTshirtShop(senderID);
+        sendTshirtShop(senderID);    
         break;
+      case 'receipt':
+        sendReadReceipt(senderID);
+        break;        
       case 'start':
         sendTshirtShopMore(senderID);
         break;
@@ -355,74 +358,69 @@ function sendVideoMessage(recipientId) {
   callSendAPI(messageData);
 }
 
-function sendTshirtShopMore(recipientId) {
-  console.log("[sendTshirtShopMore] Sending the detailed receipt");
 
-  const messageData = {
+function sendReceiptMessage(recipientId) {
+  // Generate a random receipt ID as the API requires a unique ID
+  var receiptId = "order" + Math.floor(Math.random()*1000);
+
+  var messageData = {
     recipient: {
-      id: recipientId,
+      id: recipientId
     },
-    message: {
+    message:{
       attachment: {
         type: "template",
         payload: {
           template_type: "receipt",
-          recipient_name: "Asep Setyawan",
-          order_number: "12345678902",
-          currency: "IDR",
-          payment_method: "Visa 2345",
-          order_url: "https://bit.ly/imageHeadphones",
-          timestamp: "1428444852",
+          recipient_name: "Peter Chang",
+          order_number: receiptId,
+          currency: "USD",
+          payment_method: "Visa 1234",        
+          timestamp: "1428444852", 
+          elements: [{
+            title: "Oculus Rift",
+            subtitle: "Includes: headset, sensor, remote",
+            quantity: 1,
+            price: 599.00,
+            currency: "USD",
+            image_url: "https://coral-ape-1798.twil.io/assets/snap.jpg"
+          }, {
+            title: "Samsung Gear VR",
+            subtitle: "Frost White",
+            quantity: 1,
+            price: 99.99,
+            currency: "USD",
+            image_url: "https://coral-ape-1798.twil.io/assets/snap.jpg"
+          }],
           address: {
-            street_1: "Jalan Haji Arshad",
+            street_1: "1 Hacker Way",
             street_2: "",
-            city: "Jakarta Barat",
+            city: "Menlo Park",
             postal_code: "94025",
-            state: "JKT",
-            country: "ID",
+            state: "CA",
+            country: "US"
           },
           summary: {
-            subtotal: 75000, // Correctly formatted subtotal value
-            shipping_cost: 4950,
-            total_tax: 6190,
-            total_cost: 86140, // Adjusted total
+            subtotal: 698.99,
+            shipping_cost: 20.00,
+            total_tax: 57.67,
+            total_cost: 626.66
           },
-          adjustments: [
-            {
-              name: "New Customer Discount",
-              amount: 2000,
-            },
-            {
-              name: "$10 Off Coupon",
-              amount: 10000,
-            },
-          ],
-          elements: [
-            {
-              title: "Classic White T-Shirt",
-              subtitle: "100% Soft and Luxurious Cotton",
-              quantity: 2,
-              price: 50000,
-              currency: "IDR",
-              image_url: "https://bit.ly/imageHeadphones",
-            },
-            {
-              title: "Classic Gray T-Shirt",
-              subtitle: "100% Soft and Luxurious Cotton",
-              quantity: 1,
-              price: 25000,
-              currency: "IDR",
-              image_url: "https://bit.ly/imageHeadphones",
-            },
-          ],
-        },
-      },
-    },
+          adjustments: [{
+            name: "New Customer Discount",
+            amount: -50
+          }, {
+            name: "$100 Off Coupon",
+            amount: -100
+          }]
+        }
+      }
+    }
   };
 
   callSendAPI(messageData);
+     
 }
-
       
 
 
