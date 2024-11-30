@@ -278,7 +278,7 @@ function sendTshirtShop(recipientId) {
             title: "rift",
             subtitle: "Next-generation virtual reality",
             item_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",               
-            image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
+            image_url: "./touch.jpg",
             buttons: [{
               type: "web_url",
               url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
@@ -292,7 +292,7 @@ function sendTshirtShop(recipientId) {
             title: "touch",
             subtitle: "Your Hands, Now in VR",
             item_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",               
-            image_url: SERVER_URL + "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
+            image_url: SERVER_URL + "touch.jpg",
             buttons: [{
               type: "web_url",
               url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",
