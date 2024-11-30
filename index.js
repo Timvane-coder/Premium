@@ -265,47 +265,48 @@ function sendHelpOptionsAsQuickReplies(recipientId) {
 
 
 function sendTshirtShop(recipientId) {
-  console.log("[sendTshirtShop] Sending the T-shirt options menu");
-
-  const messageData = {
+  var messageData = {
     recipient: {
-      id: recipientId,
+      id: recipientId
     },
     message: {
       attachment: {
         type: "template",
         payload: {
-          template_type: "generics",
-          top_element_style: "compact",
-          elements: [
-            {
-              title: "Classic White T-Shirt",
-              subtitle: "See all our colors",
-              image_url: "https://bit.ly/imageHeadphones",
-              "default_action": {
-                            "type": "web_url",
-                            "url": "https://bit.ly/webHeadphones",
-                            "webview_height_ratio": "tall",
-                        },
-                  
-            },
-            {
-              title: "Classic Gray T-Shirt",
-              subtitle: "Premium soft cotton",
-              image_url: "https://bit.ly/imageHeadphones",
-            },
-          ],
-          buttons: [
-            {
-              title: "Buy Now",
+          template_type: "generic",
+          elements: [{
+            title: "rift",
+            subtitle: "Next-generation virtual reality",
+            item_url: "https://www.oculus.com/en-us/rift/",               
+            image_url: SERVER_URL + "/assets/rift.png",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "Open Web URL"
+            }, {
               type: "postback",
-              payload: "VIEW_MORE", // Custom payload for postback handling
-            },
-          ],
-        },
-      },
-    },
-  };
+              title: "Call Postback",
+              payload: "Payload for first bubble",
+            }],
+          }, {
+            title: "touch",
+            subtitle: "Your Hands, Now in VR",
+            item_url: "https://www.oculus.com/en-us/touch/",               
+            image_url: SERVER_URL + "/assets/touch.png",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/touch/",
+              title: "Open Web URL"
+            }, {
+              type: "postback",
+              title: "Call Postback",
+              payload: "Payload for second bubble",
+            }]
+          }]
+        }
+      }
+    }
+  };  
 
   callSendAPI(messageData);
 }
