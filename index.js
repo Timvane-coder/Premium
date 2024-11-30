@@ -281,28 +281,30 @@ function sendTshirtShop(recipientId) {
         payload: {
           template_type: "generic",
           elements: [{
-            title: "rift",
-            subtitle: "Next-generation virtual reality",
-            item_url: "https://bit.ly/webHeadphones",               
-            image_url: "https://coral-ape-1798.twil.io/assets/mantra.jpg",
-            buttons: [{
-              type: "web_url",
-              url: "https://bit.ly/webHeadphones",
-              title: "Open Web URL"
+            "title": "rift",
+            "subtitle": "Next-generation virtual reality",
+            "item_url": "https://bit.ly/webHeadphones",               
+            "image_url": "https://coral-ape-1798.twil.io/assets/mantra.jpg",
+            "buttons": [{
+              "type": "web_url",
+              "url": "https://bit.ly/webHeadphones",
+              "title": "Open Web URL",
+              "webview_height_ratio": "tall"
             }, {
               type: "postback",
               title: "Call Postback",
               payload: "Payload for first bubble",
             }],
           }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://bit.ly/webTelevision",               
-            image_url: "https://coral-ape-1798.twil.io/assets/snap.jpg",
-            buttons: [{
-              type: "web_url",
-              url: "https://bit.ly/webTelevision",
-              title: "Open Web URL"
+            "title": "touch",
+            "subtitle": "Your Hands, Now in VR",
+            "item_url": "https://bit.ly/webTelevision",               
+            "image_url": "https://coral-ape-1798.twil.io/assets/snap.jpg",
+            "buttons": [{
+              "type": "web_url",
+              "url": "https://bit.ly/webTelevision",
+              "title": "Open Web URL",
+              "webview_height_ratio": "tall"
             }, {
               type: "postback",
               title: "Call Postback",
