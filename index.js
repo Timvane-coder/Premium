@@ -311,6 +311,73 @@ function sendTshirtShop(recipientId) {
   callSendAPI(messageData);
 }
 
+function sendTshirtShopMore(recipientId, requestForHelpOnFeature) {
+  console.log("Tshirt view more");
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment:{
+        type:"template",
+        payload:{
+          template_type:"receipt",
+          recipient_name:"Vesper Harmony",
+          order_number:"12345678902",
+          currency:"USD",
+          payment_method:"Visa 2345",        
+          order_url:"http://petersapparel.parseapp.com/order?order_id=123456",
+          timestamp:"1428444852",         
+          address:{
+            street_1:"Blantyre",
+            street_2:"",
+            city:"Blantyre",
+            postal_code:"4444",
+            state:"Southern",
+            country:"MW"
+          },
+          summary:{
+            subtotal:75.000,
+            shipping_cost:4.95,
+            total_tax:6.19,
+            total_cost:200000
+          },
+          adjustments:[
+            {
+              name:"New Customer Discount",
+              amount:20
+            },
+            {
+              name:"$10 Off Coupon",
+              amount:10
+            }
+          ],
+          elements:[
+            {
+              title:"Classic White T-Shirt",
+              subtitle:"100% Soft and Luxurious Cotton",
+              quantity:2,
+              price:50,
+              currency:"USD",
+              image_url:"https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg"
+            },
+            {
+              title:"Classic Gray T-Shirt",
+              subtitle:"100% Soft and Luxurious Cotton",
+              quantity:1,
+              price:25,
+              currency:"USD",
+              image_url:"https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg"
+            }
+          ]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
 
 
 
