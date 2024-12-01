@@ -62,7 +62,7 @@ const SERVER_URL = (process.env.SERVER_URL) ?
 
 // The protocol must be HTTPS so don't allow it to be configurable
 // avoid accidental misconfiguration by hard coding it
-const IMG_BASE_PATH = 'https://' + SERVER_URL + "/assets/screenshots/";
+const IMG_BASE_PATH = 'https://' + SERVER_URL + "/Public/assets/";
 
 // make sure that everything has been properly configured
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
