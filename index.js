@@ -273,54 +273,7 @@ function sendHelpOptionsAsQuickReplies(recipientId) {
 }
 
 
-function sendTshirtShop(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "generic",
-          elements: [{
-            "title": "rift",
-            "subtitle": "Next-generation virtual reality",             
-            "image_url": "https://coral-ape-1798.twil.io/assets/mantra.jpg"
-            "buttons": [{
-              "type": "web_url",
-              "url": "https://bit.ly/webHeadphones",
-              "title": "Open Web URL",
-              "is_reusable:true",
-              "webview_height_ratio": "tall"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for first bubble",
-            }],
-          }, {
-            "title": "touch",
-            "subtitle": "Your Hands, Now in VR",             
-            "image_url": "https://coral-ape-1798.twil.io/assets/snap.jpg"
-            "buttons": [{
-              "type": "web_url",
-              "url": "https://bit.ly/webTelevision",
-              "title": "Open Web URL",
-              "is_reusable:true",
-              "webview_height_ratio": "tall"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for second bubble",
-            }]
-          }]
-        }
-      }
-    }
-  };  
 
-  callSendAPI(messageData);
-}
 
 function sendAudioMessage(recipientId) {
   var messageData = {
@@ -359,69 +312,8 @@ function sendVideoMessage(recipientId) {
 }
 
 
-function sendReceiptMessage(recipientId) {
-  // Generate a random receipt ID as the API requires a unique ID
-  var receiptId = "order" + Math.floor(Math.random()*1000);
 
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message:{
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "receipt",
-          recipient_name: "Peter Chang",
-          order_number: receiptId,
-          currency: "USD",
-          payment_method: "Visa 1234",        
-          timestamp: "1428444852", 
-          elements: [{
-            title: "Oculus Rift",
-            subtitle: "Includes: headset, sensor, remote",
-            quantity: 1,
-            price: 599.00,
-            currency: "USD",
-            image_url: "https://coral-ape-1798.twil.io/assets/snap.jpg"
-          }, {
-            title: "Samsung Gear VR",
-            subtitle: "Frost White",
-            quantity: 1,
-            price: 99.99,
-            currency: "USD",
-            image_url: "https://coral-ape-1798.twil.io/assets/snap.jpg"
-          }],
-          address: {
-            street_1: "1 Hacker Way",
-            street_2: "",
-            city: "Menlo Park",
-            postal_code: "94025",
-            state: "CA",
-            country: "US"
-          },
-          summary: {
-            subtotal: 698.99,
-            shipping_cost: 20.00,
-            total_tax: 57.67,
-            total_cost: 626.66
-          },
-          adjustments: [{
-            name: "New Customer Discount",
-            amount: -50
-          }, {
-            name: "$100 Off Coupon",
-            amount: -100
-          }]
-        }
-      }
-    }
-  };
 
-  callSendAPI(messageData);
-     
-}
-      
 
 
 /*
