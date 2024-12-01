@@ -3,5 +3,5 @@
     "appSecret": "d8dc80074db9a8dd6a1820d3723dd3d9",
     "pageAccessToken": "EAAGZAMNvDNTwBO6jB9p7255uqbQXsCRJ5PPdZCcnFayd8WL3IxR3JEchW5gJnyr2yZA6OK2Ceupf4BZAijZBwALfgxkymL3fMStUenq5cjCRS8KrWKxsUhr56REsm66u5nLEE6Q7rozavVleIOG3YsAnU9afZAc5bcKNHafW8Dh3iN2qqZAOi9wJRY6MI2pxEcO",
     "validationToken": "YOUR_VALIDATION_TOKEN",
-    "serverURL": "https://bussiness-0831ace57310.herokuapp.com/"
+    "serverURL": "bussiness-0831ace57310.herokuapp.com/"
 }
