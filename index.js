@@ -62,7 +62,7 @@ const SERVER_URL = (process.env.SERVER_URL) ?
 
 // The protocol must be HTTPS so don't allow it to be configurable
 // avoid accidental misconfiguration by hard coding it
-const IMG_BASE_PATH = 'SERVER_URL + "/Public/assets/";
+const IMG_BASE_PATH =  'https://' + SERVER_URL + "/Public/assets/";
 
 // make sure that everything has been properly configured
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
@@ -320,7 +320,7 @@ function sendTshirtShop(recipientId) {
             title: "rift",
             subtitle: "Next-generation virtual reality",
             item_url: "https://www.oculus.com/en-us/rift/",               
-            image_url: SERVER_URL + "/Public/assets/rift.png",
+            image_url: IMG_BASE_PATH + "/Public/assets/rift.png",
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/rift/",
@@ -334,7 +334,7 @@ function sendTshirtShop(recipientId) {
             title: "touch",
             subtitle: "Your Hands, Now in VR",
             item_url: "https://www.oculus.com/en-us/touch/",               
-            image_url: SERVER_URL + "/Public/assets/touch.png",
+            image_url: IMG_BASE_PATH + "/Public/assets/touch.png",
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/touch/",
