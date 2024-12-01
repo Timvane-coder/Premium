@@ -213,6 +213,9 @@ function receivedMessage(event) {
       case 'audio':
         sendAudioMessage(senderID);
         break;
+      case 'quick':
+        sendQuickReply(senderID);
+        break;
       case 'video':
         sendVideoMessage(senderID);
         break;
@@ -264,6 +267,36 @@ function sendHelpOptionsAsQuickReplies(recipientId) {
           "content_type":"text",
           "title":"Background",
           "payload":"QR_BACKGROUND_1"
+        }
+      ]
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+function sendQuickReply(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: "What's your favorite movie genre?",
+      quick_replies: [
+        {
+          "content_type":"text",
+          "title":"Action",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION"
+        },
+        {
+          "content_type":"text",
+          "title":"Comedy",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
+        },
+        {
+          "content_type":"text",
+          "title":"Drama",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA"
         }
       ]
     }
