@@ -62,7 +62,7 @@ const SERVER_URL = (process.env.SERVER_URL) ?
 
 // The protocol must be HTTPS so don't allow it to be configurable
 // avoid accidental misconfiguration by hard coding it
-const IMG_BASE_PATH = 'https://' + SERVER_URL + "/Public/assets/";
+const IMG_BASE_PATH = 'SERVER_URL + "/Public/assets/";
 
 // make sure that everything has been properly configured
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
@@ -305,8 +305,8 @@ function sendQuickReply(recipientId) {
   callSendAPI(messageData);
 }
 
+
 function sendTshirtShop(recipientId) {
-  console.log("[sendHelpOptionsAsQuickReplies] Sending the help options menu");
   var messageData = {
     recipient: {
       id: recipientId
@@ -316,34 +316,45 @@ function sendTshirtShop(recipientId) {
         type: "template",
         payload: {
           template_type: "generic",
-          top_element_style: "compact",
-          elements: [
-            {
-              title: "Classic T-Shirt Collection",
-              subtitle: "See all our colors",
-              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",         
-            },
-            {
-              title: "Classic T-Shirt Collection",
-              subtitle: "See all our colors",
-              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",          
-            }
-          ],
-          buttons: [
-            {
-              title: "Beli",
+          elements: [{
+            title: "rift",
+            subtitle: "Next-generation virtual reality",
+            item_url: "https://www.oculus.com/en-us/rift/",               
+            image_url: SERVER_URL + "/assets/rift.png",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "Open Web URL"
+            }, {
               type: "postback",
-              payload: "VIEW_MORE"            
-            }
-          ]  
+              title: "Call Postback",
+              payload: "Payload for first bubble",
+            }],
+          }, {
+            title: "touch",
+            subtitle: "Your Hands, Now in VR",
+            item_url: "https://www.oculus.com/en-us/touch/",               
+            image_url: SERVER_URL + "/assets/touch.png",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/touch/",
+              title: "Open Web URL"
+            }, {
+              type: "postback",
+              title: "Call Postback",
+              payload: "Payload for second bubble",
+            }]
+          }]
         }
       }
     }
-  };
+  };  
 
   callSendAPI(messageData);
+                     
 }
 
+  
 function sendTshirtShopMore(recipientId, requestForHelpOnFeature) {
   console.log("Tshirt view more");
   var messageData = {
