@@ -272,6 +272,47 @@ function sendHelpOptionsAsQuickReplies(recipientId) {
   callSendAPI(messageData);
 }
 
+function sendTshirtShop(recipientId) {
+  console.log("[sendHelpOptionsAsQuickReplies] Sending the help options menu");
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          top_element_style: "compact",
+          elements: [
+            {
+              title: "Classic T-Shirt Collection",
+              subtitle: "See all our colors",
+              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",         
+            },
+            {
+              title: "Classic T-Shirt Collection",
+              subtitle: "See all our colors",
+              image_url: "https://downdistro.files.wordpress.com/2012/08/kostum_baju_bola_4ff3140a6a23e1.jpg",          
+            }
+          ],
+          buttons: [
+            {
+              title: "Beli",
+              type: "postback",
+              payload: "VIEW_MORE"            
+            }
+          ]  
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+
+
 
 
 
