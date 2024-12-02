@@ -213,6 +213,9 @@ function receivedMessage(event) {
       case 'audio':
         sendAudioMessage(senderID);
         break;
+      case 'button':
+        sendButtonMessage(senderID);
+        break;
       case 'quick':
         sendQuickReply(senderID);
         break;
