@@ -26,7 +26,7 @@ module.exports = {
             'Amazing Product',            // Subtitle or secondary message
             'Get yours now!',             // Call to action
             'IMAGE',                      // Type of attachment ('IMAGE' in this case)
-            './product_thumbnail.jpg'     // Path to the image file
+            './rift.png'     // Path to the image file
       );
 
     } catch (error) {
