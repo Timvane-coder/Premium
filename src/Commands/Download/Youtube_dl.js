@@ -16,7 +16,7 @@ const emojis = {
 };
 
 module.exports = {
-    usage: ["ytsearch", "youtube", "yt"],
+    usage: ["yt", "tube"],
     desc: "Search for YouTube videos and download them.",
     commandType: "Download",
     isGroupOnly: false,
