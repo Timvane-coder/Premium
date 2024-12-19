@@ -18,7 +18,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Chic Chic Boom is a Music Video by South Korean k-pop Boy Band Stray kids currently managed by JYP Entertainment');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/boom.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Stray%20Kids%20Chk%20Chk%20Boom%20MV_1080p.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Chic Chic Boom Music Video');
 
     } catch (error) {
