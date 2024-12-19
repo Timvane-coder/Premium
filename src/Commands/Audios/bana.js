@@ -9,15 +9,16 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇲🇼",
+  emoji: "",
   async execute(sock, m) {
     try {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/kells.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Bana Pwanya Is a Music Audio by a Malawian Singer Kell Kay Featuring Two Zambian Artist Yo Maps and Prince Luv.');
+      await buddy.sendImage(m, menuImageBuffer,'Mantra Is a Music Audio by a South Korean K-pop singer Jennie Kim');
       
-      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/banapwanya.mp3";
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/mantra.mp3');
+      const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
