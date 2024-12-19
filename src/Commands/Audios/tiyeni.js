@@ -9,13 +9,13 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇲🇼",
+  emoji: "🇺🇸",
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/praise.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/tatiana.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Ku Tiyeni Is a Music Audio by a Malawian Singer Praise Umali Featuring Two  Artist Kell Kay and Zeze From Same Country.');
+      await buddy.sendImage(m, menuImageBuffer,'Ku Tiyeni Is a Music Audio by American Singer Tatiana Manois');
       
       const menuAudioPath = path.join(__dirname, '../../Assets/Menu/understand.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
