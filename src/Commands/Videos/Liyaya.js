@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Liyaya is a Music Video done by a UK-based Malawian Artist Hazel Mak');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/Hazel.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Aika.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Liyaya Music Video');
 
     } catch (error) {
