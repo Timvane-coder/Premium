@@ -15,7 +15,7 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/lucy.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'go  is a Music Audio by a UK-based Malawian Singer Hazel Mak');
+      await buddy.sendImage(m, menuImageBuffer,'go  is a Music Audio by south Koreaan Singer Heesung');
       
       const menuAudioPath = path.join(__dirname, '../../Assets/Menu/lucy.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
