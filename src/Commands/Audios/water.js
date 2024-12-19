@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["water"],
+  usage: ["let_go"],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Audios",
   isGroupOnly: false,
@@ -17,7 +17,8 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Water is a Grammy Winning Music Audio by a South African Pop Diva Tyla');
       
-      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/water.mp3";
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/passenger.mp3');
+      const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
