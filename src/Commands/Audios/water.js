@@ -9,13 +9,13 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇿🇦",
+  emoji: "🇺🇸",
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/tyla.jpeg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/passenger.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Water is a Grammy Winning Music Audio by a South African Pop Diva Tyla');
+      await buddy.sendImage(m, menuImageBuffer,'Let go  is a Grammy Winning Music Audio by American Pop star Passenger');
       
       const menuAudioPath = path.join(__dirname, '../../Assets/Menu/passenger.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
