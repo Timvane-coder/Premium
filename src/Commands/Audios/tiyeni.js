@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["ku_tiyeni"],
+  usage: ["understand"],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Audios",
   isGroupOnly: false,
@@ -17,7 +17,8 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Ku Tiyeni Is a Music Audio by a Malawian Singer Praise Umali Featuring Two  Artist Kell Kay and Zeze From Same Country.');
       
-      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/tiyeni.mp3";
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/understand.mp3');
+      const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
