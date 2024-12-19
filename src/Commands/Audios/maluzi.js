@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["maluzi"],
+  usage: ["nerve"],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Audios",
   isGroupOnly: false,
@@ -17,7 +17,8 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'maluzi is remake musical Audio done Malawian amapiano star Zeze and features Collins.the original song of the same name was done by Collins Bandawe');
       
-      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/maluzi.mp3";
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/nadine.mp3');
+      const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
