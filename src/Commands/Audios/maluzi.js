@@ -9,13 +9,13 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇲🇼",
+  emoji: "🇸🇯",
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/zeze.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/nadine.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'maluzi is remake musical Audio done Malawian amapiano star Zeze and features Collins.the original song of the same name was done by Collins Bandawe');
+      await buddy.sendImage(m, menuImageBuffer,'maluzi is remake musical Audio done by a Norwegian singer Victoria Nadine');
       
       const menuAudioPath = path.join(__dirname, '../../Assets/Menu/nadine.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
