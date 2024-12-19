@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["trailer"],
+  usage: [""],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Audios",
   isGroupOnly: false,
