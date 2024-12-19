@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Bana Pwanya is a Musical Video by a Malawian Singer Kell Kay,the Song Features two Zambian Artists Yo Maps and Prince Luv');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/bana.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/kellkay.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* Bana Pwanya Official Music Video');
 
     } catch (error) {
