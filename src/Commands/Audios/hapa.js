@@ -13,7 +13,7 @@ module.exports = {
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/heeriye.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/Menu2.jpeg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Heeriye is a Music Audio by two indian singers Arijit Singh and Jasleen Royal.');
       
