@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Maluzi is a remix Music Video done by two Malawian artist Zeze and Collins,the later is a sole composer of the original song');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/maluzi.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/maluzi.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Maluzi Music Video');
 
     } catch (error) {
