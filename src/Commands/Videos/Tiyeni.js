@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Ku tiyeni is a Music Video by Praise Umali,the song features two Popular Malawian Artist Kell Kay and Zeze');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/kutiyeni.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Jetu.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Ku Tiyeni Music Video');
 
     } catch (error) {
