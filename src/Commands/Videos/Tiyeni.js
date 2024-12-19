@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["ku_tiyeni_mv"],
+  usage: ["wayimanya_mv"],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Videos",
   isGroupOnly: false,
@@ -13,12 +13,12 @@ module.exports = {
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/tiyeni.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/jetu.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Ku tiyeni is a Music Video by Praise Umali,the song features two Popular Malawian Artist Kell Kay and Zeze');
+      await buddy.sendImage(m, menuImageBuffer,'Wayimanya is a Music Video by Jetu, an old malawian woman who defied all odds to join music in her late years');
       
       const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Jetu.mp4";
-      await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Ku Tiyeni Music Video');
+      await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Ku Wayimanya Music Video');
 
     } catch (error) {
       console.error("Error displaying menu:", error);
