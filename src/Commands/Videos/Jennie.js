@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'You and Me is a Record Breaking KPOP Music Video by a South Korean Rapper Jennie Kim From BlackPink Girl Group Formed by YG Entertainment.');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/YouMe.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Jennie.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGL format* Official You and Me Music Video');
 
     } catch (error) {
