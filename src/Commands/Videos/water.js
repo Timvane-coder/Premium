@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer, 'Water is a Musical Video by a South African Grammy Winning Pop Star Tyla');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/Water.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Tyla.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* Water official Musical Video');
 
     } catch (error) {
