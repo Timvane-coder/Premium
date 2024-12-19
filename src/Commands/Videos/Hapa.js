@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Hapa is a Music Video by a Talented Malawian Artist Emmie Deebo who is Currently Signed under Akometsi Entertainment,The Song Features an Elite Tanzanian Artist Platform');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/hapa.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Cupid.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Hapa Music Video');
 
     } catch (error) {
