@@ -9,13 +9,13 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇲🇼",
+  emoji: "🇮🇳",
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/deebo.jpeg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/heeriye.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Heeriye is a Music Audio by ,The Song Features a.');
+      await buddy.sendImage(m, menuImageBuffer,'Heeriye is a Music Audio by two indian singers Arijit Singh and Jasleen Royal.');
       
       const menuAudioPath = path.join(__dirname, '../../Assets/Menu/heeriye.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
