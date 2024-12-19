@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'rush is a musical Audio by a Nigerian afro pop diva Ayrar Star');
       
-      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/nadine.mp3');
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/Rush.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
