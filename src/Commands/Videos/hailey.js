@@ -15,9 +15,9 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/hailey.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Shop for killers is a song by American singer Hailee Steinfeld and Swedish record producer Alesso, featuring American country music duo Florida Georgia Line and American singer-songwriter Watt');
+      await buddy.sendImage(m, menuImageBuffer,'Let me go is a song by American singer Hailee Steinfeld and Swedish record producer Alesso, featuring American country music duo Florida Georgia Line and American singer-songwriter Watt');
       
-      const menuVideoBuffer = "https://download948.mediafire.com/amuiuiz0stagXNaXXv0k3ByUFrV-ejAfTBFIrXDjymGqGiD5hcrlIagRkNKZtneqK-bqmmxSnyAXdAEURMEOkIyj2ZxeALaADVPkfuFzT6KHSircjRT99zfwHUFwbl93f2TxlVQvTjoWTBc_IB6h9FMT16Bec6euTlzbU7ZrIeSxcTQ/zeqmd9w7rv2yf11/Avatar_1A.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Haile.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl Format* Let Me Go Official Musical Video');
 
     } catch (error) {
