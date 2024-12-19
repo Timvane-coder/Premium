@@ -15,7 +15,7 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/tatiana.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Ku Tiyeni Is a Music Audio by American Singer Tatiana Manois');
+      await buddy.sendImage(m, menuImageBuffer,'Understand Is a Music Audio by American Singer Tatiana Manois');
       
       const menuAudioPath = path.join(__dirname, '../../Assets/Menu/understand.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
