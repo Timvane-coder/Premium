@@ -9,15 +9,15 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "🇲🇼",
+  emoji: "🇰🇷",
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/hazel.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/lucy.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'go  is a Music Audio by a UK-based Malawian Singer Hazel Mak');
       
-      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/heeriye.mp3');
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/lucy.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
