@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["controller"],
+  usage: ["controla"],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Audios",
   isGroupOnly: false,
@@ -16,7 +16,8 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'controller is a musical Audio done by a Malawian Afro Pop star Onesimus');
       
-      const menuAudioBuffer = "https://mustard-bird-6502.twil.io/assets/Onesimus.mp3";
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/Onesimus.mp3');
+      const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
