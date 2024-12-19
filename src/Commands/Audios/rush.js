@@ -17,7 +17,8 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'rush is a musical Audio by a Nigerian afro pop diva Ayrar Star');
       
-      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/Rush.mp3";
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/nadine.mp3');
+      const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
