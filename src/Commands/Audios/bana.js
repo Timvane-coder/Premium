@@ -9,7 +9,7 @@ module.exports = {
   isGroupOnly: false,
   isAdminOnly: false,
   isPrivateOnly: false,
-  emoji: "",
+  emoji: "🇰🇷",
   async execute(sock, m) {
     try {
 
