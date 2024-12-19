@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'Into You is a Music Video by South Korean Singer Yuri who debuted with Girls Generation kpop girl band');
       
-      const menuVideoBuffer = "https://coral-ape-1798.twil.io/assets/yuri.mp4";
+      const menuVideoBuffer = "https://mustard-bird-6502.twil.io/assets/Yuri1.mp4";
       await buddy.sendVideo(m, menuVideoBuffer,'WebGl format* Official Into You Music Video');
 
     } catch (error) {
