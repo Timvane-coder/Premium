@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 
 module.exports = {
-  usage: ["hapa"],
+  usage: ["heeriye"],
   desc: "Display the bot's menu with categories and command details.",
   commandType: "Audios",
   isGroupOnly: false,
@@ -15,9 +15,10 @@ module.exports = {
 
       const menuImagePath = path.join(__dirname, '../../Assets/Menu/deebo.jpeg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Hapa is a Music Audio by a Female Malawian Artist Emmie Deebo,The Song Features a Tanzanian Artist Platform.');
+      await buddy.sendImage(m, menuImageBuffer,'Heeriye is a Music Audio by ,The Song Features a.');
       
-      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/hapa.mp3";
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/heeriye.mp3');
+      const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
