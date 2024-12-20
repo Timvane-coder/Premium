@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'into you is an underated musical Audio done by a South korean Singer Yuri of Girls Generation Girl Group Band managed by SM entertainment');
       
-      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/Yuri.mp3";
+      const menuAudioBuffer = "https://coral-ape-1798.twil.io/assets/hold_me.mp3";
       await buddy.sendAudio(m, menuAudioBuffer);
 
     } catch (error) {
