@@ -13,11 +13,11 @@ module.exports = {
   async execute(sock, m) {
     try {
 
-      const menuImagePath = path.join(__dirname, '../../Assets/Menu/mantra.jpg');
+      const menuImagePath = path.join(__dirname, '../../Assets/Menu/heeriye.jpg');
       const menuImageBuffer = fs.readFileSync(menuImagePath);
-      await buddy.sendImage(m, menuImageBuffer,'Mantra Is a Music Audio by a South Korean K-pop singer Jennie Kim who is also a member of blackpink');
+      await buddy.sendImage(m, menuImageBuffer,'heeriye is Song by two Indian artists Arijit Singh and Jasleen Royal');
       
-      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/mantra.mp3');
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/heeriye.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
 
