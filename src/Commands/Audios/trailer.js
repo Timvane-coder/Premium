@@ -17,7 +17,7 @@ module.exports = {
       const menuImageBuffer = fs.readFileSync(menuImagePath);
       await buddy.sendImage(m, menuImageBuffer,'confesion is an Original Soundtrack done by a South Korean Singer Lim Kim; the Audio was taken from a hit Korean-Netflix drama King the Land');
       
-      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/confession.mp3');
+      const menuAudioPath = path.join(__dirname, '../../Assets/Menu/confess.mp3');
       const menuAudioBuffer = fs.readFileSync(menuAudioPath);
       await buddy.sendAudio(m, menuAudioBuffer);
       await buddy.sendAudio(m, menuAudioBuffer);
