@@ -35,7 +35,7 @@ module.exports = {
 ${emojis.wave} Status: Online and Ready!
 ${emojis.flexing} Version: ${botVersion}
 ${emojis.thumbsup} Uptime: ${runtime}
-${emojis.party} Created by: HACXK x COSM1CBUG
+${emojis.party} Created by: Boipelo x Prince
 
 ${emojis.fire} Let's get this party started! ${emojis.fire}
 `;
