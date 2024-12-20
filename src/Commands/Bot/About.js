@@ -16,10 +16,10 @@ module.exports = {
 
     async execute(sock, m) {
         try {
-            const botName = "Buddy-MD"; // Replace with your bot's name
-            const creatorName = "HACXK & COSM1CBUG"; // Replace with your name
+            const botName = "Prince-MD"; // Replace with your bot's name
+            const creatorName = "Boipelo & Prince"; // Replace with your name
             const botVersion = "V1.0.0"; // Replace with the actual version
-            const contactInfo = "📧 zaidyoutub0@gmail.com | 🌐 www.hacxk.com"; // Add your contact info
+            const contactInfo = "📧 vespertineofficial441@gmail.com | 🌐 www.prince.com"; // Add your contact info
 
             const aboutMessage = `
 *${emojis.info} About ${botName}:*
