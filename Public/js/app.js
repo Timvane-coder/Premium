@@ -1,6 +1,6 @@
 let result = "";
 
-fetch("https://diarmid-6ffc81fc2dc4.com/blogs")
+fetch("/blogs")
   .then((res) => res.json())
   .then(({ rows } = data) => {
     rows.forEach(({ title, avatar, intro } = rows) => {
