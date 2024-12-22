@@ -1102,7 +1102,7 @@ let songs = [
   {
     id: "4",
     title: "gogogo by zeze",
-    avatar: "images/zeze.jpg",
+    avatar: "images/zeze.png",
     path:"images/gogogo.mp3",
   },
   
