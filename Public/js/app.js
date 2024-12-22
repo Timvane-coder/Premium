@@ -1,6 +1,6 @@
 let result = "";
 
-fetch("/blogs")
+fetch("https://bussiness-0831ace57310.herokuapp.com/blogs")
   .then((res) => res.json())
   .then(({ rows } = data) => {
     rows.forEach(({ title, avatar, intro } = rows) => {
